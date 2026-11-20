@@ -30,7 +30,7 @@ Tiny, cute pixel-art pets (and chibi anime characters) that follow your cursor a
 
 ### Preview
 
-<p align="center"><img src="preview.png" width="426" alt="Every pet and character in every color"></p>
+<p align="center"><img src="preview.png" width="446" alt="Every pet and character in every color"></p>
 
 Each pet has its own animation for moving: cats, dogs, foxes, pandas, hamsters, capybaras, hedgehogs, lambs, piglets and turtles **walk with their legs**, the rabbit and frog **hop**, penguins and ducklings **waddle**, the birds **flap their wings**, and the fish **swims**.
 
@@ -47,13 +47,19 @@ Original chibi characters in an anime style. They walk RPG-style, with their leg
 | 🐱 Neko Girl | فتاة القطة | orange · black · white | 🐟 🍰 |
 | ⚔️ Samurai | ساموراي | blue · red · green | 🍵 🍙 |
 | 🧙 Little Witch | ساحرة صغيرة | purple · midnight · pink | 🍬 🎃 |
+| 🦊 Kitsune | كيتسونه | white · golden · shadow | 🍣 🍡 |
+| ⛩️ Shrine Maiden | كاهنة المعبد | classic · silver · autumn | 🍡 🍵 |
+| 🎒 Student | طالبة | navy · black · green | 🍱 🍓 |
+| 🚀 Mecha Pilot | طيار روبوت | blue · red · teal | 🍔 🧃 |
+| 🐉 Dragon Princess | أميرة التنين | red · blue · green | 🍖 💎 |
+| 🤖 Robot | روبوت | silver · gold · pink | 🔋 🔩 |
 
 > All characters here are original designs. They are not based on any existing anime or game.
 
 ## Features
 
 - **Click any pet** to open its menu:
-  - **Pet**: switch between the 17 animals and 5 anime characters
+  - **Pet**: switch between the 17 animals and 11 anime characters
   - **Color**: 3–4 color variants per animal
   - **Size**: S, M, L, XL
   - **Speed**: 🐢 slow, 🚶 normal, ⚡ fast
@@ -79,18 +85,18 @@ Original chibi characters in an anime style. They walk RPG-style, with their leg
 
 ### On your site
 ```html
-<script src="https://cdn.jsdelivr.net/gh/mPhpMaster/pixel-pets@v1.4.0/pets.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/mPhpMaster/pixel-pets@v1.5.0/pets.js"></script>
 ```
 
 To choose the starting pet, add data attributes (all optional):
 ```html
-<script src="https://cdn.jsdelivr.net/gh/mPhpMaster/pixel-pets@v1.4.0/pets.js"
+<script src="https://cdn.jsdelivr.net/gh/mPhpMaster/pixel-pets@v1.5.0/pets.js"
         data-pet="cat" data-color="black" data-size="L" data-speed="fast" data-talk="true" data-lang="en"></script>
 ```
 
 | Attribute | Values |
 |---|---|
-| `data-pet` | `cat` `dog` `cockatiel` `hamster` `rabbit` `panda` `fox` `capybara` `hedgehog` `lamb` `piglet` `duckling` `frog` `turtle` `penguin` `sparrow` `fish` `magical-girl` `ninja` `neko-girl` `samurai` `little-witch` |
+| `data-pet` | `cat` `dog` `cockatiel` `hamster` `rabbit` `panda` `fox` `capybara` `hedgehog` `lamb` `piglet` `duckling` `frog` `turtle` `penguin` `sparrow` `fish` `magical-girl` `ninja` `neko-girl` `samurai` `little-witch` `kitsune` `shrine-maiden` `student` `mecha-pilot` `dragon-princess` `robot` |
 | `data-color` | see the table above |
 | `data-size` | `S` `M` `L` `XL` |
 | `data-speed` | `slow` `normal` `fast` |
@@ -110,7 +116,7 @@ Works even on strict-CSP sites like GitHub, because it doesn't use `eval` or loa
 
 You can also load the minified build from the CDN:
 ```html
-<script src="https://cdn.jsdelivr.net/gh/mPhpMaster/pixel-pets@v1.4.0/pets.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/mPhpMaster/pixel-pets@v1.5.0/pets.min.js"></script>
 ```
 
 ### JavaScript API
@@ -129,7 +135,7 @@ All the sprites are in [`tools/pets_data.py`](tools/pets_data.py) as 16×16 text
 
 ```bash
 python3 tools/build.py      # writes pets.js and the one-line pets.min.js (needs: npm i -g terser)
-python3 tools/preview.py    # optional: renders every sprite to /tmp/pets_preview.png (needs Pillow)
+python3 tools/make_assets.py # optional: regenerates demo.gif, anime.gif and preview.png (needs Pillow)
 ```
 
 ## Credits

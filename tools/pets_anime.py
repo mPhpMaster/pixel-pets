@@ -158,3 +158,165 @@ def install(PETS):
             ".KCCCCCCCCCCCK..",
         ], "S", "L"),
     )
+
+
+FACE = [
+    ".KHSSSSSSSSSHK..",
+    ".KHSSESSSESSHK..",
+    ".KHSSESSSESSHK..",
+    ".KHSNSSSSSNSHK..",
+    "..KHSSSMSSSHK...",
+]
+HAIR = [
+    "....KKKKKKK.....",
+    "...KHHHHHHHK....",
+    "..KHHHHHHHHHK...",
+    ".KHHHHHHHHHHHK..",
+    ".KHHSSSSSSSHHK..",
+]
+EARS = [  # animal ears replace the first two rows
+    "..KK.......KK...",
+    "..KNHKKKKKHNK...",
+]
+
+
+def install_more(PETS):
+    PETS["kitsune"] = dict(
+        group="anime", label="Kitsune", ar="كيتسونه", treats=["🍣", "🍡"],
+        sounds={"en": ["Kon kon!", "🦊✨", "*tail swish*", "Hehe~"], "ar": ["كون كون!", "🦊✨", "*يهز ذيله*", "هيهي~"]},
+        speed=1.15, bounce=1, head=10, eyes=EYES,
+        palettes={
+            "white": dict(swatch="#f6f2ea", K="#5a3a2a", H="#f3f1f8", N="#ff9eb0", S="#ffe3d1", E="#c47a12", M="#c0506a",
+                          C="#ffffff", A="#e0453a", T="#ffb052", W="#ffffff", L="#e0453a"),
+            "golden": dict(swatch="#ffc86b", K="#5a3517", H="#ffc86b", N="#ff9eb0", S="#ffe3d1", E="#8a3a12", M="#c0506a",
+                           C="#ffffff", A="#e0453a", T="#ffc86b", W="#ffffff", L="#e0453a"),
+            "shadow": dict(swatch="#3a3a44", K="#0d0d12", H="#3a3a44", N="#ff9eb0", S="#ffe3d1", E="#d4a017", M="#c0506a",
+                           C="#2f2f38", A="#8a4fe0", T="#3a3a44", W="#d9ccff", L="#8a4fe0"),
+        },
+        sprites=_walk(EARS + HAIR[2:] + FACE + [
+            "....KCCACCK.....",
+            "...KSCCCCCSK.KK.",
+            "...KCCAAACCKKTTK",
+            "...KCCCCCCCKTTWK",
+        ], "S", "L"),
+    )
+
+    PETS["shrine-maiden"] = dict(
+        group="anime", label="Shrine Maiden", ar="كاهنة المعبد", treats=["🍡", "🍵"],
+        sounds={"en": ["Blessings!", "*sweeps*", "⛩️", "Good luck~"], "ar": ["بركة!", "*تكنس*", "⛩️", "بالتوفيق~"]},
+        speed=0.95, bounce=1, head=10, eyes=EYES,
+        palettes={
+            "classic": dict(swatch="#d93a3a", K="#141418", H="#1f1b24", S="#ffe3d1", E="#6a2a3a", N="#ff9eb0", M="#c0506a",
+                            W="#ffffff", D="#d93a3a", L="#f4f0e6"),
+            "silver": dict(swatch="#d8dbe4", K="#4a5260", H="#d8dbe4", S="#ffe3d1", E="#3a5a9a", N="#ff9eb0", M="#c0506a",
+                           W="#ffffff", D="#c0392b", L="#f4f0e6"),
+            "autumn": dict(swatch="#e8862a", K="#2a160c", H="#8a4a2a", S="#ffe3d1", E="#4a2a1a", N="#ff9eb0", M="#c0506a",
+                           W="#ffffff", D="#e8862a", L="#f4f0e6"),
+        },
+        sprites=_walk([
+            "....KKKKKKK.....",
+            "...KHHHHHHHKWW..",
+            "..KHHHHHHHHHK...",
+            ".KHHHHHHHHHHHK..",
+            ".KHHSSSSSSSHHK..",
+        ] + FACE + [
+            ".KHKWWWWWWWKHK..",
+            ".KHKSWWWWWSKHK..",
+            "..KDDDDDDDDDK...",
+            "..KDDDDDDDDDK...",
+        ], "D", "L"),
+    )
+
+    PETS["student"] = dict(
+        group="anime", label="Student", ar="طالبة", treats=["🍱", "🍓"],
+        sounds={"en": ["Ohayo!", "Late for school!", "📚", "Senpai?"], "ar": ["صباح الخير!", "تأخرت عالمدرسة!", "📚", "سينباي؟"]},
+        speed=1.2, bounce=1, head=10, eyes=EYES,
+        palettes={
+            "navy": dict(swatch="#2b3a6a", K="#2a1d14", H="#6b4a33", S="#ffe3d1", E="#3a2a1a", N="#ff9eb0", M="#c0506a",
+                         B="#2b3a6a", A="#e0453a", W="#ffffff", L="#2b1d12"),
+            "black": dict(swatch="#26262c", K="#0d0d12", H="#1f1b24", S="#ffe3d1", E="#3a2a4a", N="#ff9eb0", M="#c0506a",
+                          B="#26262c", A="#e0453a", W="#ffffff", L="#1a1a1f"),
+            "green": dict(swatch="#2f6a4f", K="#2a160c", H="#c97a3a", S="#ffe3d1", E="#2a4a2a", N="#ff9eb0", M="#c0506a",
+                          B="#2f6a4f", A="#ffd84a", W="#ffffff", L="#2b1d12"),
+        },
+        sprites=_walk(HAIR + FACE + [
+            "....KBBABBK.....",
+            "...KSBWWWBSK....",
+            "...KBBBBBBBK....",
+            "..KBBBBBBBBBK...",
+        ], "S", "L"),
+    )
+
+    PETS["mecha-pilot"] = dict(
+        group="anime", label="Mecha Pilot", ar="طيار روبوت", treats=["🍔", "🧃"],
+        sounds={"en": ["Launching!", "Roger!", "🚀", "*beep*"], "ar": ["انطلاق!", "حاضر!", "🚀", "*بيب*"]},
+        speed=1.3, bounce=1, head=10, eyes=EYES,
+        palettes={
+            "blue": dict(swatch="#3a7bd5", K="#141c2a", H="#3a7bd5", S="#ffe3d1", E="#1b2a4a", N="#ff9eb0", M="#c0506a",
+                         A="#ff8a2a", C="#f4f6fa"),
+            "red": dict(swatch="#e0453a", K="#1a0f0f", H="#e0453a", S="#ffe3d1", E="#4a1a1a", N="#ff9eb0", M="#c0506a",
+                        A="#e0453a", C="#2a2a33"),
+            "teal": dict(swatch="#2aa198", K="#0f2422", H="#2aa198", S="#ffe3d1", E="#14403c", N="#ff9eb0", M="#c0506a",
+                         A="#ffd84a", C="#f4f6fa"),
+        },
+        sprites=_walk(HAIR[:4] + [
+            ".AHHSSSSSSSHHA..",
+            ".AHSSSSSSSSSHA..",
+        ] + FACE[1:] + [
+            "....KCCACCK.....",
+            "...KACCCCCAK....",
+            "...KCCAAACCK....",
+            "...KCCCCCCCK....",
+        ], "C", "A"),
+    )
+
+    PETS["dragon-princess"] = dict(
+        group="anime", label="Dragon Princess", ar="أميرة التنين", treats=["🍖", "💎"],
+        sounds={"en": ["Rawr~", "🔥", "Bow, peasant!", "♥"], "ar": ["راوورر~", "🔥", "انحنِ!", "♥"]},
+        speed=1.0, bounce=1, head=10, eyes=EYES,
+        palettes={
+            "red": dict(swatch="#c0392b", K="#3a0f12", H="#c0392b", R="#ffe8b0", N="#ff9eb0", S="#ffe3d1", E="#d4a017",
+                        M="#c0506a", C="#ff9ecb", A="#ffd84a", T="#c0392b", L="#ffd84a"),
+            "blue": dict(swatch="#3a7bd5", K="#0f1d3a", H="#3a7bd5", R="#e8f4ff", N="#ff9eb0", S="#ffe3d1", E="#2ad4c0",
+                         M="#c0506a", C="#b8e0ff", A="#ffffff", T="#3a7bd5", L="#ffffff"),
+            "green": dict(swatch="#2f9a5a", K="#0f2a18", H="#2f9a5a", R="#fff2c0", N="#ff9eb0", S="#ffe3d1", E="#e0453a",
+                          M="#c0506a", C="#e0ffd0", A="#ffd84a", T="#2f9a5a", L="#ffd84a"),
+        },
+        sprites=_walk([
+            "..KK.......KK...",
+            "..KRHKKKKKHRK...",
+        ] + HAIR[2:] + FACE + [
+            "....KCCACCK.....",
+            "...KSCCCCCSK.KK.",
+            "...KCCCCCCCKKTTK",
+            "..KCCCCCCCCCKTK.",
+        ], "S", "L"),
+    )
+
+    PETS["robot"] = dict(
+        group="anime", label="Robot", ar="روبوت", treats=["🔋", "🔩"],
+        sounds={"en": ["Beep boop", "01001000 01101001", "🔋?", "Hello, human!"],
+                "ar": ["بيب بوب", "01001000 01101001", "🔋؟", "مرحبا يا إنسان!"]},
+        speed=1.0, bounce=1, head=10, eyes=[(5, 7), (9, 7)],
+        palettes={
+            "silver": dict(swatch="#c9d3df", K="#2a3340", M="#c9d3df", G="#1b2a3a", E="#5af0ff", A="#ff5a7a", N="#ff9eb0"),
+            "gold": dict(swatch="#f2c94c", K="#4a3a10", M="#f2c94c", G="#2a2410", E="#7dff8a", A="#ff5a7a", N="#ff9eb0"),
+            "pink": dict(swatch="#ffc1dc", K="#6b2f4a", M="#ffc1dc", G="#3a1a2a", E="#ffe14d", A="#7a5af0", N="#ff9eb0"),
+        },
+        sprites=_walk([
+            ".......K........",
+            "......KAK.......",
+            ".......K........",
+            "..KKKKKKKKKKK...",
+            ".KMMMMMMMMMMMK..",
+            ".KMKKKKKKKKKMK..",
+            ".KMKGGGGGGGKMK..",
+            ".KMKGEGGGEGKMK..",
+            ".KMKGNGGGNGKMK..",
+            ".KMKKKKKKKKKMK..",
+            ".KMMMMMMMMMMMK..",
+            "....KMMMMMK.....",
+            "...KMKAAAKMK....",
+            "...KKMMMMMKK....",
+        ], "M", "K"),
+    )

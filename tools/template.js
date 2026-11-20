@@ -88,7 +88,7 @@
     .treat { position: absolute; font: 20px/1 system-ui, sans-serif; transform: translate(-50%, -50%);
       pointer-events: none; animation: drop .35s ease-out; }
     @keyframes drop { from { transform: translate(-50%, -140%); opacity: 0; } }
-    .menu { position: absolute; pointer-events: auto; width: 256px; box-sizing: border-box;
+    .menu { position: absolute; pointer-events: auto; width: 272px; box-sizing: border-box;
       background: #fffdf6; color: #2b2418; border: 2px solid #2b2418; border-radius: 14px;
       box-shadow: 4px 4px 0 rgba(0,0,0,.18); padding: 10px 10px 12px; display: none; max-height: calc(100vh - 16px); overflow-y: auto;
       font: 13px/1.35 system-ui, -apple-system, "Segoe UI", sans-serif; user-select: none; }
@@ -453,7 +453,7 @@
     }
 
     function position() {
-      const w = 256, h = box.offsetHeight || 420, m = 8;
+      const w = 272, h = box.offsetHeight || 420, m = 8;
       let left = pet.x + pet.px / 2 + 10;
       if (left + w > innerWidth - m) left = pet.x - pet.px / 2 - 10 - w;
       let top = pet.y - h / 2;
