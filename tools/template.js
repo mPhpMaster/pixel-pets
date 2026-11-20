@@ -11,6 +11,31 @@
   const SIZES = { S: 24, M: 32, L: 48, XL: 64 };
   const FRAME_MS = 100;
   const script = document.currentScript;
+  const LANG_KEY = "pixel-pets:lang";
+
+  // ------------------------------------------------------------ i18n
+  const I18N = {
+    en: {
+      dir: "ltr", pet: "Pet", color: "Color", size: "Size", speed: "Speed", speech: "Speech", language: "Language",
+      slow: "🐢 Slow", normal: "🚶 Normal", fast: "⚡ Fast", on: "💬 On", off: "🤫 Off",
+      love: "❤️ Pet", treat: "🍪 Treat", add: "➕ Add pet", remove: "🗑 Remove",
+      close: "Close (Esc)", clickMe: "Click me!", nom: "*nom*", settings: "Pixel Pets settings",
+    },
+    ar: {
+      dir: "rtl", pet: "الحيوان", color: "اللون", size: "الحجم", speed: "السرعة", speech: "الكلام", language: "اللغة",
+      slow: "🐢 بطيء", normal: "🚶 عادي", fast: "⚡ سريع", on: "💬 تشغيل", off: "🤫 إيقاف",
+      love: "❤️ دلّعه", treat: "🍪 حلاوة", add: "➕ حيوان جديد", remove: "🗑 حذف",
+      close: "إغلاق (Esc)", clickMe: "اضغط عليّ!", nom: "*هام هام*", settings: "إعدادات الحيوانات",
+    },
+  };
+  let lang = (() => {
+    try { const l = localStorage.getItem(LANG_KEY); if (I18N[l]) return l; } catch (_) {}
+    const d = script && script.dataset && script.dataset.lang;
+    return I18N[d] ? d : "en";
+  })();
+  const T = (k) => I18N[lang][k];
+  const petName = (d) => (lang === "ar" ? d.ar : d.label);
+  const petSounds = (d) => d.sounds[lang] || d.sounds.en;
 
   // ------------------------------------------------------------ state & storage
   function defaults() {
@@ -66,7 +91,7 @@
     @keyframes drop { from { transform: translate(-50%, -140%); opacity: 0; } }
     .menu { position: absolute; pointer-events: auto; width: 248px; box-sizing: border-box;
       background: #fffdf6; color: #2b2418; border: 2px solid #2b2418; border-radius: 14px;
-      box-shadow: 4px 4px 0 rgba(0,0,0,.18); padding: 10px 10px 12px; display: none;
+      box-shadow: 4px 4px 0 rgba(0,0,0,.18); padding: 10px 10px 12px; display: none; max-height: calc(100vh - 16px); overflow-y: auto;
       font: 13px/1.35 system-ui, -apple-system, "Segoe UI", sans-serif; user-select: none; }
     .menu.open { display: block; animation: pop .12s ease-out; }
     @keyframes pop { from { transform: scale(.94); opacity: 0; } }
@@ -144,10 +169,11 @@
 
       this.el = el("div", "pet");
       this.bubble = el("div", "bubble");
+      this.bubble.dir = "auto";
       this.canvas = el("canvas");
       this.canvas.width = 16;
       this.canvas.height = 16;
-      this.canvas.title = "Click me!";
+      this.canvas.title = T("clickMe");
       this.ctx = this.canvas.getContext("2d");
       this.el.append(this.bubble, this.canvas);
       root.append(this.el);
@@ -228,7 +254,7 @@
         if (this.talk) opts.push("talk", "talk");
         this.idleAnim = rand(opts);
         this.idleFrame = 0;
-        if (this.idleAnim === "talk") this.say(rand(this.def.sounds), 18);
+        if (this.idleAnim === "talk") this.say(rand(petSounds(this.def)), 18);
       }
 
       switch (this.idleAnim) {
@@ -278,7 +304,7 @@
           this.x = t.x; this.y = t.y;
           this.treat.el.remove();
           this.treat = null;
-          if (this.talk) this.say("*nom*", 8);
+          if (this.talk) this.say(T("nom"), 8);
           this.hearts(3);
         }
         this.idle();
@@ -314,7 +340,7 @@
   const menu = (() => {
     const box = el("div", "menu");
     box.setAttribute("role", "dialog");
-    box.setAttribute("aria-label", "Pixel Pets settings");
+    
     root.append(box);
     let pet = null;
 
@@ -328,18 +354,20 @@
 
     function render() {
       box.textContent = "";
+      box.dir = T("dir");
+      box.setAttribute("aria-label", T("settings"));
       const def = PETS[pet.type];
 
       const top = el("div", "top");
-      top.append(el("span", null, "🐾 " + def.label + " · " + def.ar));
+      top.append(el("span", null, "🐾 " + petName(def)));
       const x = el("button", "x", "×");
       x.type = "button";
-      x.title = "Close (Esc)";
+      x.title = T("close");
       x.addEventListener("click", (e) => { e.stopPropagation(); close(); });
       top.append(x);
       box.append(top);
 
-      section("Pet");
+      section(T("pet"));
       const grid = el("div", "grid");
       for (const [key, p] of Object.entries(PETS)) {
         const b = button("", key === pet.type, () => {
@@ -347,19 +375,19 @@
           pet.color = Object.keys(p.palettes)[0];
           pet.hush();
           pet.draw("idle");
-          if (pet.talk) pet.say(rand(p.sounds), 14);
+          if (pet.talk) pet.say(rand(petSounds(p)), 14);
           changed();
         }, "pick");
         const c = el("canvas");
         c.width = c.height = 16;
         paint(c.getContext("2d"), p.sprites.idle, Object.values(p.palettes)[0], false);
-        b.append(c, document.createTextNode(p.label));
-        b.title = p.ar;
+        b.append(c, document.createTextNode(petName(p)));
+        b.title = petName(p);
         grid.append(b);
       }
       box.append(grid);
 
-      section("Color");
+      section(T("color"));
       const colors = el("div", "row");
       for (const [key, pal] of Object.entries(def.palettes)) {
         const b = button("", key === pet.color, () => { pet.color = key; pet.draw(pet.sprite); changed(); }, "sw");
@@ -370,41 +398,52 @@
       }
       box.append(colors);
 
-      section("Size");
+      section(T("size"));
       const sizes = el("div", "row");
       for (const k of Object.keys(SIZES)) {
         sizes.append(button(k, k === pet.size, () => { pet.size = k; pet.applySize(); pet.place(); changed(); }, "grow"));
       }
       box.append(sizes);
 
-      section("Speed");
+      section(T("speed"));
       const speeds = el("div", "row");
-      const icons = { slow: "🐢 Slow", normal: "🚶 Normal", fast: "⚡ Fast" };
-      for (const k of Object.keys(SPEEDS)) {
-        speeds.append(button(icons[k], k === pet.speed, () => { pet.speed = k; changed(); }, "grow"));
+            for (const k of Object.keys(SPEEDS)) {
+        speeds.append(button(T(k), k === pet.speed, () => { pet.speed = k; changed(); }, "grow"));
       }
       box.append(speeds);
 
-      section("Speech");
+      section(T("speech"));
       const talk = el("div", "row");
       talk.append(
-        button("💬 On", pet.talk, () => { pet.talk = true; pet.say(rand(def.sounds), 12); changed(); }, "grow"),
-        button("🤫 Off", !pet.talk, () => { pet.talk = false; pet.hush(); changed(); }, "grow"),
+        button(T("on"), pet.talk, () => { pet.talk = true; pet.say(rand(petSounds(def)), 12); changed(); }, "grow"),
+        button(T("off"), !pet.talk, () => { pet.talk = false; pet.hush(); changed(); }, "grow"),
       );
       box.append(talk);
 
+      section(T("language"));
+      const langs = el("div", "row");
+      for (const [code, label] of [["en", "English"], ["ar", "العربية"]]) {
+        langs.append(button(label, code === lang, () => {
+          lang = code;
+          try { localStorage.setItem(LANG_KEY, code); } catch (_) {}
+          for (const p of pets) p.canvas.title = T("clickMe");
+          render();
+        }, "grow"));
+      }
+      box.append(langs);
+
       const actions = el("div", "actions");
       actions.append(
-        button("❤️ Pet", false, () => { pet.hearts(5); }),
-        button("🍪 Treat", false, () => { const p = pet; close(); p.dropTreat(); }),
-        button("➕ Add pet", false, () => {
+        button(T("love"), false, () => { pet.hearts(5); }),
+        button(T("treat"), false, () => { const p = pet; close(); p.dropTreat(); }),
+        button(T("add"), false, () => {
           const type = rand(Object.keys(PETS));
           const p = add({ ...pet.settings(), type, color: rand(Object.keys(PETS[type].palettes)) });
           p.x = pet.x + 24; p.y = pet.y; p.place();
           save();
           open(p);
         }),
-        button("🗑 Remove", false, () => { const p = pet; close(); p.remove(); save(); }, "danger"),
+        button(T("remove"), false, () => { const p = pet; close(); p.remove(); save(); }, "danger"),
       );
       box.append(actions);
       position();
@@ -479,7 +518,9 @@
       save();
       return p;
     },
-    reset() { try { localStorage.removeItem(STORE_KEY); } catch (_) {} },
+    get lang() { return lang; },
+    setLang(l) { if (I18N[l]) { lang = l; try { localStorage.setItem(LANG_KEY, l); } catch (_) {} if (menu.pet) menu.open(menu.pet); } },
+    reset() { try { localStorage.removeItem(STORE_KEY); localStorage.removeItem(LANG_KEY); } catch (_) {} },
     destroy() { destroyed = true; guard.disconnect(); menu.close(); host.remove(); delete window.PixelPets; },
   };
 })();
