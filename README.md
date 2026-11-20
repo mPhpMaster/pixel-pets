@@ -58,12 +58,12 @@ Each pet moves its own way: birds flap, cats and dogs walk, the rabbit and frog 
 
 ### On your site
 ```html
-<script src="https://cdn.jsdelivr.net/gh/mPhpMaster/pixel-pets@v1.1.0/pets.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/mPhpMaster/pixel-pets@v1.2.0/pets.js"></script>
 ```
 
 To choose the starting pet, add data attributes (all optional):
 ```html
-<script src="https://cdn.jsdelivr.net/gh/mPhpMaster/pixel-pets@v1.1.0/pets.js"
+<script src="https://cdn.jsdelivr.net/gh/mPhpMaster/pixel-pets@v1.2.0/pets.js"
         data-pet="cat" data-color="black" data-size="L" data-speed="fast" data-talk="true" data-lang="en"></script>
 ```
 
@@ -78,8 +78,19 @@ To choose the starting pet, add data attributes (all optional):
 
 Settings the visitor saves from the menu take priority over these defaults.
 
-### On any page (DevTools console)
-Open the console (F12), paste the full contents of [`pets.js`](pets.js), and press Enter.
+### On any page: one-line copy & paste
+[`pets.min.js`](pets.min.js) is the whole script in **one line**, so it's easy to copy and run anywhere:
+
+1. Open [`pets.min.js` (raw)](https://raw.githubusercontent.com/mPhpMaster/pixel-pets/main/pets.min.js), select all, and copy. You can also use the **📋 Copy one-liner** button on the [live demo](https://mphpmaster.github.io/pixel-pets/).
+2. On any website, open DevTools (F12) and go to the **Console** tab.
+3. Paste and press Enter. 🐾
+
+Works even on strict-CSP sites like GitHub, because it doesn't use `eval` or load any files.
+
+You can also load the minified build from the CDN:
+```html
+<script src="https://cdn.jsdelivr.net/gh/mPhpMaster/pixel-pets@v1.2.0/pets.min.js"></script>
+```
 
 ### JavaScript API
 ```js
@@ -96,7 +107,7 @@ PixelPets.destroy(); // remove everything
 All the sprites are in [`tools/pets_data.py`](tools/pets_data.py) as 16×16 text grids, with one letter per palette color. Each pet has `idle`, `move1` and `move2` frames. The blink and dance frames are generated from those. To add a pet, a color, a phrase or a treat, edit that file and rebuild:
 
 ```bash
-python3 tools/build.py      # writes pets.js
+python3 tools/build.py      # writes pets.js and the one-line pets.min.js (needs: npm i -g terser)
 python3 tools/preview.py    # optional: renders every sprite to /tmp/pets_preview.png (needs Pillow)
 ```
 

@@ -1,5 +1,4 @@
-// Pixel Pets: pixel-art pets that follow your cursor. Click a pet to customize it.
-// https://github.com/mPhpMaster/pixel-pets (inspired by oneko.js)
+/*! Pixel Pets: cute pixel-art pets that follow your cursor. Click a pet to customize it. https://github.com/mPhpMaster/pixel-pets (MIT) */
 // Self-contained: no images, no network, no eval. Works on strict-CSP pages too.
 (function pixelPets() {
   "use strict";

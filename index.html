@@ -42,12 +42,14 @@
       <li>Try <b>❤️ Pet</b> and <b>🍪 Treat</b>, or add more pets.</li>
       <li>Switch the language to <b>العربية</b> to make them talk in Arabic.</li>
     </ol>
-    <pre>&lt;script src="https://cdn.jsdelivr.net/gh/mPhpMaster/pixel-pets@v1.1.0/pets.js"&gt;&lt;/script&gt;</pre>
+    <pre>&lt;script src="https://cdn.jsdelivr.net/gh/mPhpMaster/pixel-pets@v1.2.0/pets.js"&gt;&lt;/script&gt;</pre>
     <div class="row">
+      <button class="btn" type="button" id="copy">📋 Copy one-liner</button>
       <button class="btn" type="button" id="add">➕ Add a random pet</button>
       <button class="btn" type="button" id="reset">↺ Reset</button>
       <a class="btn" href="https://github.com/mPhpMaster/pixel-pets">GitHub</a>
     </div>
+    <p><small>“Copy one-liner” copies the whole script as a single line. Paste it into any page's DevTools console (F12) to get pets there.</small></p>
     <p><small>Your pets are saved in this browser (localStorage).</small></p>
   </main>
 
@@ -56,6 +58,14 @@
     document.getElementById("add").addEventListener("click", function () {
       var types = PixelPets.types;
       PixelPets.add({ type: types[Math.floor(Math.random() * types.length)] });
+    });
+    document.getElementById("copy").addEventListener("click", function () {
+      var btn = this;
+      fetch("pets.min.js").then(function (r) { return r.text(); })
+        .then(function (code) { return navigator.clipboard.writeText(code.trim()); })
+        .then(function () { btn.textContent = "✅ Copied!"; })
+        .catch(function () { window.open("pets.min.js", "_blank"); })
+        .finally(function () { setTimeout(function () { btn.textContent = "📋 Copy one-liner"; }, 2000); });
     });
     document.getElementById("reset").addEventListener("click", function () {
       PixelPets.reset();
