@@ -1,6 +1,6 @@
 # Pixel Pets 🐾
 
-Tiny, cute pixel-art pets, chibi anime characters, cars and flying things that follow your cursor around the page. **Click a pet** to pick its type, color, size and speed, switch the language (English / العربية), give it a treat, or add more pets. Inspired by [oneko.js](https://github.com/adryd325/oneko.js).
+Tiny, cute pixel-art pets and chibi characters that follow your cursor around the page. **Click a pet** to pick its type, color, size and speed, switch the language (English / العربية), give it a treat, or add more pets. Inspired by [oneko.js](https://github.com/adryd325/oneko.js).
 
 <p align="center"><b><a href="https://mphpmaster.github.io/pixel-pets/">▶ Try the live demo</a></b></p>
 
@@ -27,12 +27,18 @@ Tiny, cute pixel-art pets, chibi anime characters, cars and flying things that f
 | 🐧 Penguin | بطريق | classic · emperor · baby | 🐟 |
 | 🐦 Sparrow | عصفور | sparrow · canary · bluebird | 🌻 🍞 |
 | 🐟 Fish | سمكة | goldfish · blue-tang · clownfish | 🦐 |
+| 🐻 Bear Cub | دبدوب | brown · polar · honey | 🍯 🐟 |
+| 🐕 Corgi | كورجي | red · tricolor · cream | 🦴 🧀 |
+| 🐭 Mouse | فأر صغير | grey · white · brown | 🧀 |
+| 🦄 Unicorn | يونيكورن | classic · lavender · mint | 🍬 🌈 |
+| 🐨 Koala | كوالا | grey · brown · pink | 🌿 |
+| 🦉 Owl | بومة | brown · snowy · pink | 🫐 🍓 |
 
 ### Preview
 
-<p align="center"><img src="preview.png" width="446" alt="Every pet and character in every color"></p>
+<p align="center"><img src="preview.png" width="466" alt="Every pet and character in every color"></p>
 
-Each pet has its own animation for moving: cats, dogs, foxes, pandas, hamsters, capybaras, hedgehogs, lambs, piglets and turtles **walk with their legs**, the rabbit and frog **hop**, penguins and ducklings **waddle**, the birds **flap their wings**, and the fish **swims**.
+Each pet has its own animation for moving: cats, dogs, corgis, bears, foxes, pandas, hamsters, mice, unicorns, capybaras, hedgehogs, lambs, piglets and turtles **walk with their legs**, the rabbit and frog **hop**, penguins, koalas and ducklings **waddle**, the birds and the owl **flap their wings**, and the fish **swims**.
 
 ## Anime characters
 
@@ -54,41 +60,27 @@ Original chibi characters in an anime style. They walk RPG-style, with their leg
 | 🐉 Dragon Princess | أميرة التنين | red · blue · green | 🍖 💎 |
 | 🤖 Robot | روبوت | silver · gold · pink | 🔋 🔩 |
 
-> All characters here are original designs. They are not based on any existing anime or game.
+> All characters here are original designs. They are not based on any existing anime, game or person.
 
-## Cars
+## Characters
 
-<p align="center"><img src="cars.gif" alt="Cute cars driving"></p>
+<p align="center"><img src="heroes.gif" alt="Pirate, astronaut, chef, knight, ghost and superhero"></p>
 
-Cute chibi cars with big round wheels that spin as they drive. The headlights "blink", and the police car's lights flash red and blue.
+Classic character types, all original designs:
 
-| Car | عربي | Colors | Treat |
+| Character | عربي | Colors | Treat |
 |---|---|---|---|
-| 🚗 Bubble Car | سيارة فقاعة | pink · mint · lemon | ⛽ 🧽 |
-| 🚕 Taxi | تاكسي | yellow · black · green | ⛽ 🧽 |
-| 🚓 Police Car | سيارة شرطة | classic · night · pink | 🍩 ⛽ |
-| 🏎️ Race Car | سيارة سباق | red · blue · green | ⛽ 🏁 |
-| 🍦 Ice Cream Van | شاحنة آيسكريم | sky · pink · mint | 🍦 🍨 |
-| 🚌 Mini Bus | باص صغير | orange · yellow · red | ⛽ 🧽 |
-
-## Sky
-
-<p align="center"><img src="sky.gif" alt="Planes, rocket, flying saucer and helicopter"></p>
-
-Flying things that float as they follow you. Propellers and rotors spin, the rocket's flame flickers, and the flying saucer's lights circle around its little alien pilot.
-
-| Flyer | عربي | Colors | Treat |
-|---|---|---|---|
-| ✈️ Plane | طيارة | red · sky · lemon | ⛽ ☁️ |
-| 🛩️ Jet | طيارة نفاثة | white · grey · pink | ⛽ ☁️ |
-| 🚀 Rocket | صاروخ | classic · pastel · space | ⛽ ⭐ |
-| 🛸 Flying Saucer | صحن طائر | silver · purple · mint | ⭐ 🛸 |
-| 🚁 Helicopter | هليكوبتر | orange · blue · green | ⛽ ☁️ |
+| 🏴‍☠️ Pirate | قرصان | classic · red · navy | 🪙 🍖 |
+| 🧑‍🚀 Astronaut | رائد فضاء | white · orange · pink | 🍫 ⭐ |
+| 👨‍🍳 Chef | طباخ | classic · pastry · bbq | 🧁 🍳 |
+| ⚔️ Knight | فارس | silver · gold · dark | 🍗 🍎 |
+| 👻 Ghost | شبح | white · mint · lilac | 🍬 🎃 |
+| 🦸 Superhero | بطل خارق | blue · pink · green | 🍕 ⭐ |
 
 ## Features
 
 - **Click any pet** to open its menu:
-  - **Pet**: pick from 4 tabs: 🐾 17 animals, ✨ 11 anime characters, 🚗 6 cars, ✈️ 5 flyers
+  - **Pet**: pick from 3 tabs: 🐾 23 animals, ✨ 11 anime characters, 🎭 6 classic characters
   - **Color**: 3–4 color variants per animal
   - **Size**: S, M, L, XL
   - **Speed**: 🐢 slow, 🚶 normal, ⚡ fast
@@ -115,18 +107,18 @@ Flying things that float as they follow you. Propellers and rotors spin, the roc
 
 ### On your site
 ```html
-<script src="https://cdn.jsdelivr.net/gh/mPhpMaster/pixel-pets@v1.7.0/pets.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/mPhpMaster/pixel-pets@v1.8.0/pets.js"></script>
 ```
 
 To choose the starting pet, add data attributes (all optional):
 ```html
-<script src="https://cdn.jsdelivr.net/gh/mPhpMaster/pixel-pets@v1.7.0/pets.js"
+<script src="https://cdn.jsdelivr.net/gh/mPhpMaster/pixel-pets@v1.8.0/pets.js"
         data-pet="cat" data-color="black" data-size="L" data-speed="fast" data-talk="true" data-lang="en" data-scroll="screen"></script>
 ```
 
 | Attribute | Values |
 |---|---|
-| `data-pet` | `cat` `dog` `cockatiel` `hamster` `rabbit` `panda` `fox` `capybara` `hedgehog` `lamb` `piglet` `duckling` `frog` `turtle` `penguin` `sparrow` `fish` `magical-girl` `ninja` `neko-girl` `samurai` `little-witch` `kitsune` `shrine-maiden` `student` `mecha-pilot` `dragon-princess` `robot` `bubble-car` `taxi` `police-car` `race-car` `ice-cream-van` `mini-bus` `plane` `jet` `rocket` `ufo` `helicopter` |
+| `data-pet` | `cat` `dog` `cockatiel` `hamster` `rabbit` `panda` `fox` `capybara` `hedgehog` `lamb` `piglet` `duckling` `frog` `turtle` `penguin` `sparrow` `fish` `bear` `corgi` `mouse` `unicorn` `koala` `owl` `magical-girl` `ninja` `neko-girl` `samurai` `little-witch` `kitsune` `shrine-maiden` `student` `mecha-pilot` `dragon-princess` `robot` `pirate` `astronaut` `chef` `knight` `ghost` `superhero` |
 | `data-color` | see the table above |
 | `data-size` | `S` `M` `L` `XL` |
 | `data-speed` | `slow` `normal` `fast` |
@@ -147,7 +139,7 @@ Works even on strict-CSP sites like GitHub, because it doesn't use `eval` or loa
 
 You can also load the minified build from the CDN:
 ```html
-<script src="https://cdn.jsdelivr.net/gh/mPhpMaster/pixel-pets@v1.7.0/pets.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/mPhpMaster/pixel-pets@v1.8.0/pets.min.js"></script>
 ```
 
 ### JavaScript API
@@ -163,11 +155,11 @@ PixelPets.destroy(); // remove everything
 
 ## Customizing / adding pets
 
-All the sprites are in [`tools/pets_data.py`](tools/pets_data.py) as 16×16 text grids, with one letter per palette color. Each pet has `idle`, `move1` and `move2` frames (walk cycles live in [`tools/pets_walk.py`](tools/pets_walk.py); anime characters in [`tools/pets_anime.py`](tools/pets_anime.py), cars in [`tools/pets_cars.py`](tools/pets_cars.py), flyers in [`tools/pets_sky.py`](tools/pets_sky.py)). The blink and dance frames are generated from those. To add a pet, a color, a phrase or a treat, edit that file and rebuild:
+All the sprites are in [`tools/pets_data.py`](tools/pets_data.py) as 16×16 text grids, with one letter per palette color. Each pet has `idle`, `move1` and `move2` frames (walk cycles live in [`tools/pets_walk.py`](tools/pets_walk.py); anime characters in [`tools/pets_anime.py`](tools/pets_anime.py), more pets and the classic characters in [`tools/pets_more.py`](tools/pets_more.py)). The blink and dance frames are generated from those. To add a pet, a color, a phrase or a treat, edit that file and rebuild:
 
 ```bash
 python3 tools/build.py      # writes pets.js and the one-line pets.min.js (needs: npm i -g terser)
-python3 tools/make_assets.py # optional: regenerates demo.gif, anime.gif, cars.gif, sky.gif and preview.png (needs Pillow)
+python3 tools/make_assets.py # optional: regenerates demo.gif, anime.gif, heroes.gif and preview.png (needs Pillow)
 ```
 
 ## Credits

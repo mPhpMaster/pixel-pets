@@ -16,14 +16,14 @@
   // ------------------------------------------------------------ i18n
   const I18N = {
     en: {
-      dir: "ltr", pets: "Pets", anime: "Anime", cars: "Cars", sky: "Sky", color: "Color", size: "Size", speed: "Speed", speech: "Speech", language: "Language",
+      dir: "ltr", pets: "Pets", anime: "Anime", heroes: "Characters", color: "Color", size: "Size", speed: "Speed", speech: "Speech", language: "Language",
       slow: "🐢 Slow", normal: "🚶 Normal", fast: "⚡ Fast", on: "💬 On", off: "🤫 Off",
       love: "❤️ Pet", treat: "🍪 Treat", add: "➕ Add pet", remove: "🗑 Remove",
       close: "Close (Esc)", clickMe: "Click me!", nom: "*nom*", settings: "Pixel Pets settings",
       scroll: "On scroll", screen: "📌 Stay on screen", page: "📜 Move with page",
     },
     ar: {
-      dir: "rtl", pets: "حيوانات", anime: "أنمي", cars: "سيارات", sky: "السماء", color: "اللون", size: "الحجم", speed: "السرعة", speech: "الكلام", language: "اللغة",
+      dir: "rtl", pets: "حيوانات", anime: "أنمي", heroes: "شخصيات", color: "اللون", size: "الحجم", speed: "السرعة", speech: "الكلام", language: "اللغة",
       slow: "🐢 بطيء", normal: "🚶 عادي", fast: "⚡ سريع", on: "💬 تشغيل", off: "🤫 إيقاف",
       love: "❤️ دلّعه", treat: "🍪 حلاوة", add: "➕ حيوان جديد", remove: "🗑 حذف",
       close: "إغلاق (Esc)", clickMe: "اضغط عليّ!", nom: "*هام هام*", settings: "إعدادات الحيوانات",
@@ -109,7 +109,7 @@
     h4 { margin: 10px 0 5px; font-size: 10.5px; letter-spacing: .07em; text-transform: uppercase; opacity: .6; }
     .grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 4px; }
     .row { display: flex; gap: 4px; flex-wrap: wrap; }
-    .tabs { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 3px; margin: 10px 0 6px; padding: 3px; background: #f3eedf; border-radius: 10px; }
+    .tabs { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 3px; margin: 10px 0 6px; padding: 3px; background: #f3eedf; border-radius: 10px; }
     .btn.tab { padding: 4px 1px; font-size: 11px; line-height: 1.25; background: transparent; white-space: pre-line; }
     .btn.tab.on { background: #fff; border-color: #2b2418; }
     .btn { all: unset; box-sizing: border-box; cursor: pointer; border: 2px solid transparent; border-radius: 8px;
@@ -382,10 +382,10 @@
       box.append(top);
 
       // character picker: one tab per group
-      const groups = ["pets", "anime", "cars", "sky"].filter((g) => Object.values(PETS).some((p) => (p.group || "pets") === g));
+      const groups = ["pets", "anime", "heroes"].filter((g) => Object.values(PETS).some((p) => (p.group || "pets") === g));
       if (!groups.includes(tab)) tab = def.group || "pets";
       const tabs = el("div", "tabs");
-      const icons = { pets: "🐾", anime: "✨", cars: "🚗", sky: "✈️" };
+      const icons = { pets: "🐾", anime: "✨", heroes: "🎭" };
       for (const g of groups) {
         tabs.append(button(icons[g] + "\n" + T(g), g === tab, () => { tab = g; render(); }, "tab"));
       }

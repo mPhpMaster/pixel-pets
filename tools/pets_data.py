@@ -578,17 +578,16 @@ _install_walks(PETS)
 from pets_anime import install as _install_anime, install_more as _install_anime_more
 _install_anime(PETS)
 _install_anime_more(PETS)
-from pets_cars import install as _install_cars
-_install_cars(PETS)
-from pets_sky import install as _install_sky
-_install_sky(PETS)
+from pets_more import install_pets as _install_more_pets, install_heroes as _install_heroes
+_install_more_pets(PETS)
+_install_heroes(PETS)
 
 ORDER = ["cat", "dog", "cockatiel", "hamster", "rabbit", "panda", "fox", "capybara",
          "hedgehog", "lamb", "piglet", "duckling", "frog", "turtle", "penguin", "sparrow", "fish",
+         "bear", "corgi", "mouse", "unicorn", "koala", "owl",
          "magical-girl", "ninja", "neko-girl", "samurai", "little-witch",
          "kitsune", "shrine-maiden", "student", "mecha-pilot", "dragon-princess", "robot",
-         "bubble-car", "taxi", "police-car", "race-car", "ice-cream-van", "mini-bus",
-         "plane", "jet", "rocket", "ufo", "helicopter"]
+         "pirate", "astronaut", "chef", "knight", "ghost", "superhero"]
 PETS = {k: PETS[k] for k in ORDER}
 
 # ---------------------------------------------------------------- derived frames

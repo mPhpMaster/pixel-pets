@@ -6,8 +6,7 @@ from pets_data import PETS
 
 ROOT = os.path.join(HERE, "..")
 anime = [k for k, p in PETS.items() if p.get("group") == "anime"]
-cars = [k for k, p in PETS.items() if p.get("group") == "cars"]
-sky = [k for k, p in PETS.items() if p.get("group") == "sky"]
+heroes = [k for k, p in PETS.items() if p.get("group") == "heroes"]
 pets = [k for k in PETS if not PETS[k].get("group")]
 
 
@@ -33,14 +32,14 @@ def gif(keys, out, cols, S=5, walk_seq=True):
 
 
 def preview():
-    S = 4; cell = 18 * S; label_w = 150; hdr = 30
+    S = 4; cell = 18 * S; label_w = 160; hdr = 30
     maxp = max(len(p["palettes"]) for p in PETS.values())
-    W = label_w + maxp * cell + 8; H = len(PETS) * cell + 4 * hdr + 8
+    W = label_w + maxp * cell + 8; H = len(PETS) * cell + 3 * hdr + 8
     img = Image.new("RGB", (W, H), "#ffffff"); d = ImageDraw.Draw(img)
     bold = "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf"
     font = ImageFont.truetype(bold, 15); big = ImageFont.truetype(bold, 17)
     y0 = 4
-    for title, keys in (("Pets", pets), ("Anime", anime), ("Cars", cars), ("Sky", sky)):
+    for title, keys in (("Pets", pets), ("Anime", anime), ("Characters", heroes)):
         d.text((10, y0 + 6), title.upper(), fill="#8a7f6a", font=big); y0 += hdr
         for j, k in enumerate(keys):
             p = PETS[k]
@@ -60,7 +59,6 @@ def preview():
 if __name__ == "__main__":
     gif(pets, "demo.gif", 6)
     gif(anime, "anime.gif", 6, S=5, walk_seq=False)
-    gif(cars, "cars.gif", 6, S=5)
-    gif(sky, "sky.gif", 5, S=5)
+    gif(heroes, "heroes.gif", 6, S=5, walk_seq=False)
     preview()
-    print("assets written:", len(pets), "pets,", len(anime), "anime,", len(cars), "cars,", len(sky), "sky")
+    print("assets written:", len(pets), "pets,", len(anime), "anime,", len(heroes), "characters")
