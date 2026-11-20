@@ -6,7 +6,8 @@ from pets_data import PETS
 
 ROOT = os.path.join(HERE, "..")
 anime = [k for k, p in PETS.items() if p.get("group") == "anime"]
-pets = [k for k in PETS if k not in anime]
+cars = [k for k, p in PETS.items() if p.get("group") == "cars"]
+pets = [k for k in PETS if k not in anime and k not in cars]
 
 
 def gif(keys, out, cols, S=5, walk_seq=True):
@@ -33,12 +34,12 @@ def gif(keys, out, cols, S=5, walk_seq=True):
 def preview():
     S = 4; cell = 18 * S; label_w = 150; hdr = 30
     maxp = max(len(p["palettes"]) for p in PETS.values())
-    W = label_w + maxp * cell + 8; H = len(PETS) * cell + 2 * hdr + 8
+    W = label_w + maxp * cell + 8; H = len(PETS) * cell + 3 * hdr + 8
     img = Image.new("RGB", (W, H), "#ffffff"); d = ImageDraw.Draw(img)
     bold = "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf"
     font = ImageFont.truetype(bold, 15); big = ImageFont.truetype(bold, 17)
     y0 = 4
-    for title, keys in (("Pets", pets), ("Anime", anime)):
+    for title, keys in (("Pets", pets), ("Anime", anime), ("Cars", cars)):
         d.text((10, y0 + 6), title.upper(), fill="#8a7f6a", font=big); y0 += hdr
         for j, k in enumerate(keys):
             p = PETS[k]
@@ -58,5 +59,6 @@ def preview():
 if __name__ == "__main__":
     gif(pets, "demo.gif", 6)
     gif(anime, "anime.gif", 6, S=5, walk_seq=False)
+    gif(cars, "cars.gif", 6, S=5)
     preview()
-    print("assets written:", len(pets), "pets,", len(anime), "anime")
+    print("assets written:", len(pets), "pets,", len(anime), "anime,", len(cars), "cars")

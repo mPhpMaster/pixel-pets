@@ -1,6 +1,6 @@
 # Pixel Pets 🐾
 
-Tiny, cute pixel-art pets (and chibi anime characters) that follow your cursor around the page. **Click a pet** to pick its type, color, size and speed, switch the language (English / العربية), give it a treat, or add more pets. Inspired by [oneko.js](https://github.com/adryd325/oneko.js).
+Tiny, cute pixel-art pets, chibi anime characters and cars that follow your cursor around the page. **Click a pet** to pick its type, color, size and speed, switch the language (English / العربية), give it a treat, or add more pets. Inspired by [oneko.js](https://github.com/adryd325/oneko.js).
 
 <p align="center"><b><a href="https://mphpmaster.github.io/pixel-pets/">▶ Try the live demo</a></b></p>
 
@@ -56,10 +56,25 @@ Original chibi characters in an anime style. They walk RPG-style, with their leg
 
 > All characters here are original designs. They are not based on any existing anime or game.
 
+## Cars
+
+<p align="center"><img src="cars.gif" alt="Cute cars driving"></p>
+
+Cute little cars. Their wheels spin, they puff exhaust, and the headlights "blink". The police car's lights flash red and blue.
+
+| Car | عربي | Colors | Treat |
+|---|---|---|---|
+| 🚗 Bubble Car | سيارة فقاعة | pink · mint · lemon | ⛽ 🧽 |
+| 🚕 Taxi | تاكسي | yellow · black · green | ⛽ 🧽 |
+| 🚓 Police Car | سيارة شرطة | classic · night · pink | 🍩 ⛽ |
+| 🏎️ Race Car | سيارة سباق | red · blue · green | ⛽ 🏁 |
+| 🍦 Ice Cream Van | شاحنة آيسكريم | sky · pink · mint | 🍦 🍨 |
+| 🚌 Mini Bus | باص صغير | orange · yellow · red | ⛽ 🧽 |
+
 ## Features
 
 - **Click any pet** to open its menu:
-  - **Pet**: switch between the 17 animals and 11 anime characters
+  - **Pet**: switch between 17 animals, 11 anime characters and 6 cars
   - **Color**: 3–4 color variants per animal
   - **Size**: S, M, L, XL
   - **Speed**: 🐢 slow, 🚶 normal, ⚡ fast
@@ -85,18 +100,18 @@ Original chibi characters in an anime style. They walk RPG-style, with their leg
 
 ### On your site
 ```html
-<script src="https://cdn.jsdelivr.net/gh/mPhpMaster/pixel-pets@v1.5.0/pets.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/mPhpMaster/pixel-pets@v1.6.0/pets.js"></script>
 ```
 
 To choose the starting pet, add data attributes (all optional):
 ```html
-<script src="https://cdn.jsdelivr.net/gh/mPhpMaster/pixel-pets@v1.5.0/pets.js"
+<script src="https://cdn.jsdelivr.net/gh/mPhpMaster/pixel-pets@v1.6.0/pets.js"
         data-pet="cat" data-color="black" data-size="L" data-speed="fast" data-talk="true" data-lang="en"></script>
 ```
 
 | Attribute | Values |
 |---|---|
-| `data-pet` | `cat` `dog` `cockatiel` `hamster` `rabbit` `panda` `fox` `capybara` `hedgehog` `lamb` `piglet` `duckling` `frog` `turtle` `penguin` `sparrow` `fish` `magical-girl` `ninja` `neko-girl` `samurai` `little-witch` `kitsune` `shrine-maiden` `student` `mecha-pilot` `dragon-princess` `robot` |
+| `data-pet` | `cat` `dog` `cockatiel` `hamster` `rabbit` `panda` `fox` `capybara` `hedgehog` `lamb` `piglet` `duckling` `frog` `turtle` `penguin` `sparrow` `fish` `magical-girl` `ninja` `neko-girl` `samurai` `little-witch` `kitsune` `shrine-maiden` `student` `mecha-pilot` `dragon-princess` `robot` `bubble-car` `taxi` `police-car` `race-car` `ice-cream-van` `mini-bus` |
 | `data-color` | see the table above |
 | `data-size` | `S` `M` `L` `XL` |
 | `data-speed` | `slow` `normal` `fast` |
@@ -116,7 +131,7 @@ Works even on strict-CSP sites like GitHub, because it doesn't use `eval` or loa
 
 You can also load the minified build from the CDN:
 ```html
-<script src="https://cdn.jsdelivr.net/gh/mPhpMaster/pixel-pets@v1.5.0/pets.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/mPhpMaster/pixel-pets@v1.6.0/pets.min.js"></script>
 ```
 
 ### JavaScript API
@@ -131,11 +146,11 @@ PixelPets.destroy(); // remove everything
 
 ## Customizing / adding pets
 
-All the sprites are in [`tools/pets_data.py`](tools/pets_data.py) as 16×16 text grids, with one letter per palette color. Each pet has `idle`, `move1` and `move2` frames (walk cycles live in [`tools/pets_walk.py`](tools/pets_walk.py); anime characters in [`tools/pets_anime.py`](tools/pets_anime.py)). The blink and dance frames are generated from those. To add a pet, a color, a phrase or a treat, edit that file and rebuild:
+All the sprites are in [`tools/pets_data.py`](tools/pets_data.py) as 16×16 text grids, with one letter per palette color. Each pet has `idle`, `move1` and `move2` frames (walk cycles live in [`tools/pets_walk.py`](tools/pets_walk.py); anime characters in [`tools/pets_anime.py`](tools/pets_anime.py), cars in [`tools/pets_cars.py`](tools/pets_cars.py)). The blink and dance frames are generated from those. To add a pet, a color, a phrase or a treat, edit that file and rebuild:
 
 ```bash
 python3 tools/build.py      # writes pets.js and the one-line pets.min.js (needs: npm i -g terser)
-python3 tools/make_assets.py # optional: regenerates demo.gif, anime.gif and preview.png (needs Pillow)
+python3 tools/make_assets.py # optional: regenerates demo.gif, anime.gif, cars.gif and preview.png (needs Pillow)
 ```
 
 ## Credits

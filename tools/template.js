@@ -15,13 +15,13 @@
   // ------------------------------------------------------------ i18n
   const I18N = {
     en: {
-      dir: "ltr", pets: "Pets", anime: "Anime", color: "Color", size: "Size", speed: "Speed", speech: "Speech", language: "Language",
+      dir: "ltr", pets: "Pets", anime: "Anime", cars: "Cars", color: "Color", size: "Size", speed: "Speed", speech: "Speech", language: "Language",
       slow: "🐢 Slow", normal: "🚶 Normal", fast: "⚡ Fast", on: "💬 On", off: "🤫 Off",
       love: "❤️ Pet", treat: "🍪 Treat", add: "➕ Add pet", remove: "🗑 Remove",
       close: "Close (Esc)", clickMe: "Click me!", nom: "*nom*", settings: "Pixel Pets settings",
     },
     ar: {
-      dir: "rtl", pets: "الحيوانات", anime: "شخصيات أنمي", color: "اللون", size: "الحجم", speed: "السرعة", speech: "الكلام", language: "اللغة",
+      dir: "rtl", pets: "الحيوانات", anime: "شخصيات أنمي", cars: "سيارات", color: "اللون", size: "الحجم", speed: "السرعة", speech: "الكلام", language: "اللغة",
       slow: "🐢 بطيء", normal: "🚶 عادي", fast: "⚡ سريع", on: "💬 تشغيل", off: "🤫 إيقاف",
       love: "❤️ دلّعه", treat: "🍪 حلاوة", add: "➕ حيوان جديد", remove: "🗑 حذف",
       close: "إغلاق (Esc)", clickMe: "اضغط عليّ!", nom: "*هام هام*", settings: "إعدادات الحيوانات",
@@ -366,8 +366,8 @@
       top.append(x);
       box.append(top);
 
-      for (const group of ["pets", "anime"]) {
-        const entries = Object.entries(PETS).filter(([, p]) => (p.group === "anime" ? "anime" : "pets") === group);
+      for (const group of ["pets", "anime", "cars"]) {
+        const entries = Object.entries(PETS).filter(([, p]) => (p.group || "pets") === group);
         if (!entries.length) continue;
         section(T(group));
         const grid = el("div", "grid");
