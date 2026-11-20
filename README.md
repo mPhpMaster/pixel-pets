@@ -107,12 +107,12 @@ Classic character types, all original designs:
 
 ### On your site
 ```html
-<script src="https://cdn.jsdelivr.net/gh/mPhpMaster/pixel-pets@v1.8.0/pets.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/mPhpMaster/pixel-pets@v1.8.1/pets.js"></script>
 ```
 
 To choose the starting pet, add data attributes (all optional):
 ```html
-<script src="https://cdn.jsdelivr.net/gh/mPhpMaster/pixel-pets@v1.8.0/pets.js"
+<script src="https://cdn.jsdelivr.net/gh/mPhpMaster/pixel-pets@v1.8.1/pets.js"
         data-pet="cat" data-color="black" data-size="L" data-speed="fast" data-talk="true" data-lang="en" data-scroll="screen"></script>
 ```
 
@@ -139,7 +139,7 @@ Works even on strict-CSP sites like GitHub, because it doesn't use `eval` or loa
 
 You can also load the minified build from the CDN:
 ```html
-<script src="https://cdn.jsdelivr.net/gh/mPhpMaster/pixel-pets@v1.8.0/pets.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/mPhpMaster/pixel-pets@v1.8.1/pets.min.js"></script>
 ```
 
 ### JavaScript API

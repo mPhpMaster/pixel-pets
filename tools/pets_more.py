@@ -108,35 +108,35 @@ def install_pets(PETS):
         ),
     )
 
-    # ------------------------------------------------------------ unicorn (side walk)
+    # ------------------------------------------------------------ unicorn (chibi: big head, big eye, pastel mane)
     uni = [
-        "................",
-        "............KK..",
-        "...........KYK..",
-        "..........KMKK..",
-        ".........KMAAAK.",
-        "........KMAAAEAK",
-        "........KMAAAANK",
-        "..KKK...KMAAAAK.",
-        ".KMMMKKKKAAAAK..",
-        ".KMMAAAAAAAAK...",
-        "..KKAAAAAAAAK...",
-        "...KAAAAAAAAK...",
-        "...KKKKKKKKKK...",
+        "..........K.....",
+        ".........KYK.K..",
+        ".....KKKKKYKAK..",
+        "....KPPAAAAAAK..",
+        "...KPQPAAAAAAAK.",
+        "...KPQAAAAAWEAK.",
+        "...KPPAAAAAEEAK.",
+        "..KPQPAAAAAANAAK",
+        "..KQPKKAAAAAAAK.",
+        ".KPQKKAAAAAAAK..",
+        "KQPKKAAAAAAAAK..",
+        "KPQKAAAAAAAAAK..",
+        ".KK.KKKKKKKKKK..",
     ]
     PETS["unicorn"] = dict(
         label="Unicorn", ar="يونيكورن", treats=["🍬", "🌈"],
         sounds={"en": ["✨ Neigh~", "🌈", "Magic!", "♥"], "ar": ["✨ صهيل~", "🌈", "سحر!", "♥"]},
-        speed=1.2, bounce=1, head=8, eyes=[(13, 5)],
+        speed=1.15, bounce=1, head=8, eyes=[(11, 5), (12, 5), (11, 6), (12, 6)],
         palettes={
-            "classic": dict(swatch="#ff9ecb", K="#6b5a7a", A="#ffffff", M="#ff9ecb", Y="#ffd84a", H="#c9b8ff", N="#ffb3c7", E="#3a2a4a"),
-            "lavender": dict(swatch="#d9ccff", K="#4a3a6a", A="#e8dfff", M="#7fe0c8", Y="#ffd84a", H="#a78bfa", N="#ffb3c7", E="#2a1a4a"),
-            "mint": dict(swatch="#c8f5dc", K="#2f5a4a", A="#d9fbe8", M="#b18cff", Y="#ffd84a", H="#7fd0a8", N="#ffb3c7", E="#1a3a2a"),
+            "classic": dict(swatch="#ff9ecb", K="#6b5a7a", A="#ffffff", P="#ff9ecb", Q="#9fd3ff", Y="#ffd84a", H="#c9b8ff", N="#ffb3c7", E="#3a2a4a", W="#ffffff"),
+            "lavender": dict(swatch="#ece4ff", K="#4a3a6a", A="#ece4ff", P="#7fe0c8", Q="#ffd84a", Y="#ffd84a", H="#a78bfa", N="#ffb3c7", E="#2a1a4a", W="#ffffff"),
+            "mint": dict(swatch="#dcfbe9", K="#2f5a4a", A="#dcfbe9", P="#b18cff", Q="#ff9ecb", Y="#ffd84a", H="#7fd0a8", N="#ffb3c7", E="#1a3a2a", W="#ffffff"),
         },
         sprites=dict(
-            idle=uni + ["...KAK...KAK....", "...KHK...KHK....", "................"],
-            move1=uni + ["..KAK.....KAK...", "..KHK.....KHK...", "................"],
-            move2=uni + ["....KAK.KAK.....", "....KHK.KHK.....", "................"],
+            idle=uni + ["....KAK..KAK....", "....KHK..KHK....", "................"],
+            move1=uni + ["...KAK....KAK...", "...KHK....KHK...", "................"],
+            move2=uni + [".....KAKKAK.....", ".....KHKKHK.....", "................"],
         ),
     )
 
