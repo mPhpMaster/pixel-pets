@@ -15,13 +15,13 @@
   // ------------------------------------------------------------ i18n
   const I18N = {
     en: {
-      dir: "ltr", pet: "Pet", color: "Color", size: "Size", speed: "Speed", speech: "Speech", language: "Language",
+      dir: "ltr", pets: "Pets", anime: "Anime", color: "Color", size: "Size", speed: "Speed", speech: "Speech", language: "Language",
       slow: "🐢 Slow", normal: "🚶 Normal", fast: "⚡ Fast", on: "💬 On", off: "🤫 Off",
       love: "❤️ Pet", treat: "🍪 Treat", add: "➕ Add pet", remove: "🗑 Remove",
       close: "Close (Esc)", clickMe: "Click me!", nom: "*nom*", settings: "Pixel Pets settings",
     },
     ar: {
-      dir: "rtl", pet: "الحيوان", color: "اللون", size: "الحجم", speed: "السرعة", speech: "الكلام", language: "اللغة",
+      dir: "rtl", pets: "الحيوانات", anime: "شخصيات أنمي", color: "اللون", size: "الحجم", speed: "السرعة", speech: "الكلام", language: "اللغة",
       slow: "🐢 بطيء", normal: "🚶 عادي", fast: "⚡ سريع", on: "💬 تشغيل", off: "🤫 إيقاف",
       love: "❤️ دلّعه", treat: "🍪 حلاوة", add: "➕ حيوان جديد", remove: "🗑 حذف",
       close: "إغلاق (Esc)", clickMe: "اضغط عليّ!", nom: "*هام هام*", settings: "إعدادات الحيوانات",
@@ -105,7 +105,7 @@
     .btn:hover { border-color: #cfc4a6; }
     .btn.on { border-color: #2b2418; background: #fff; }
     .btn:focus-visible { outline: 2px solid #3b82f6; outline-offset: 1px; }
-    .pick { padding: 4px 1px 3px; font-size: 10px; overflow: hidden; text-overflow: ellipsis; }
+    .pick { padding: 4px 1px 3px; font-size: 10px; line-height: 1.15; white-space: normal; overflow-wrap: anywhere; }
     .pick canvas { width: 32px; height: 32px; image-rendering: pixelated; display: block; margin: 0 auto 1px; }
     .sw { width: 24px; height: 24px; padding: 0; border-radius: 50%; border: 2px solid #d8cfb6; }
     .sw.on { border-color: #2b2418; box-shadow: 0 0 0 2px #fffdf6 inset; }
@@ -366,25 +366,29 @@
       top.append(x);
       box.append(top);
 
-      section(T("pet"));
-      const grid = el("div", "grid");
-      for (const [key, p] of Object.entries(PETS)) {
-        const b = button("", key === pet.type, () => {
-          pet.type = key;
-          pet.color = Object.keys(p.palettes)[0];
-          pet.hush();
-          pet.draw("idle");
-          if (pet.talk) pet.say(rand(petSounds(p)), 14);
-          changed();
-        }, "pick");
-        const c = el("canvas");
-        c.width = c.height = 16;
-        paint(c.getContext("2d"), p.sprites.idle, Object.values(p.palettes)[0], false);
-        b.append(c, document.createTextNode(petName(p)));
-        b.title = petName(p);
-        grid.append(b);
+      for (const group of ["pets", "anime"]) {
+        const entries = Object.entries(PETS).filter(([, p]) => (p.group === "anime" ? "anime" : "pets") === group);
+        if (!entries.length) continue;
+        section(T(group));
+        const grid = el("div", "grid");
+        for (const [key, p] of entries) {
+          const b = button("", key === pet.type, () => {
+            pet.type = key;
+            pet.color = Object.keys(p.palettes)[0];
+            pet.hush();
+            pet.draw("idle");
+            if (pet.talk) pet.say(rand(petSounds(p)), 14);
+            changed();
+          }, "pick");
+          const c = el("canvas");
+          c.width = c.height = 16;
+          paint(c.getContext("2d"), p.sprites.idle, Object.values(p.palettes)[0], false);
+          b.append(c, document.createTextNode(petName(p)));
+          b.title = petName(p);
+          grid.append(b);
+        }
+        box.append(grid);
       }
-      box.append(grid);
 
       section(T("color"));
       const colors = el("div", "row");

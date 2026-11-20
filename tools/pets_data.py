@@ -575,9 +575,12 @@ for _k, (_en, _ar) in SOUNDS.items():
 
 from pets_walk import install as _install_walks
 _install_walks(PETS)
+from pets_anime import install as _install_anime
+_install_anime(PETS)
 
 ORDER = ["cat", "dog", "cockatiel", "hamster", "rabbit", "panda", "fox", "capybara",
-         "hedgehog", "lamb", "piglet", "duckling", "frog", "turtle", "penguin", "sparrow", "fish"]
+         "hedgehog", "lamb", "piglet", "duckling", "frog", "turtle", "penguin", "sparrow", "fish",
+         "magical-girl", "ninja", "neko-girl", "samurai", "little-witch"]
 PETS = {k: PETS[k] for k in ORDER}
 
 # ---------------------------------------------------------------- derived frames

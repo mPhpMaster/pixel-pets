@@ -1,6 +1,6 @@
 # Pixel Pets 🐾
 
-Tiny, cute pixel-art pets that follow your cursor around the page. **Click a pet** to pick its type, color, size and speed, switch the language (English / العربية), give it a treat, or add more pets. Inspired by [oneko.js](https://github.com/adryd325/oneko.js).
+Tiny, cute pixel-art pets (and chibi anime characters) that follow your cursor around the page. **Click a pet** to pick its type, color, size and speed, switch the language (English / العربية), give it a treat, or add more pets. Inspired by [oneko.js](https://github.com/adryd325/oneko.js).
 
 <p align="center"><b><a href="https://mphpmaster.github.io/pixel-pets/">▶ Try the live demo</a></b></p>
 
@@ -30,14 +30,30 @@ Tiny, cute pixel-art pets that follow your cursor around the page. **Click a pet
 
 ### Preview
 
-<p align="center"><img src="preview.png" width="406" alt="Every pet in every color"></p>
+<p align="center"><img src="preview.png" width="426" alt="Every pet and character in every color"></p>
 
 Each pet has its own animation for moving: cats, dogs, foxes, pandas, hamsters, capybaras, hedgehogs, lambs, piglets and turtles **walk with their legs**, the rabbit and frog **hop**, penguins and ducklings **waddle**, the birds **flap their wings**, and the fish **swims**.
+
+## Anime characters
+
+<p align="center"><img src="anime.gif" alt="Chibi anime characters walking"></p>
+
+Original chibi characters in an anime style. They walk RPG-style, with their legs stepping.
+
+| Character | عربي | Colors | Treat |
+|---|---|---|---|
+| ✨ Magical Girl | فتاة سحرية | pink · mint · lavender | 🍡 🍓 |
+| 🥷 Ninja | نينجا | navy · shadow · snow | 🍙 🍡 |
+| 🐱 Neko Girl | فتاة القطة | orange · black · white | 🐟 🍰 |
+| ⚔️ Samurai | ساموراي | blue · red · green | 🍵 🍙 |
+| 🧙 Little Witch | ساحرة صغيرة | purple · midnight · pink | 🍬 🎃 |
+
+> All characters here are original designs. They are not based on any existing anime or game.
 
 ## Features
 
 - **Click any pet** to open its menu:
-  - **Pet**: switch between the 17 animals
+  - **Pet**: switch between the 17 animals and 5 anime characters
   - **Color**: 3–4 color variants per animal
   - **Size**: S, M, L, XL
   - **Speed**: 🐢 slow, 🚶 normal, ⚡ fast
@@ -63,18 +79,18 @@ Each pet has its own animation for moving: cats, dogs, foxes, pandas, hamsters, 
 
 ### On your site
 ```html
-<script src="https://cdn.jsdelivr.net/gh/mPhpMaster/pixel-pets@v1.3.0/pets.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/mPhpMaster/pixel-pets@v1.4.0/pets.js"></script>
 ```
 
 To choose the starting pet, add data attributes (all optional):
 ```html
-<script src="https://cdn.jsdelivr.net/gh/mPhpMaster/pixel-pets@v1.3.0/pets.js"
+<script src="https://cdn.jsdelivr.net/gh/mPhpMaster/pixel-pets@v1.4.0/pets.js"
         data-pet="cat" data-color="black" data-size="L" data-speed="fast" data-talk="true" data-lang="en"></script>
 ```
 
 | Attribute | Values |
 |---|---|
-| `data-pet` | `cat` `dog` `cockatiel` `hamster` `rabbit` `panda` `fox` `capybara` `hedgehog` `lamb` `piglet` `duckling` `frog` `turtle` `penguin` `sparrow` `fish` |
+| `data-pet` | `cat` `dog` `cockatiel` `hamster` `rabbit` `panda` `fox` `capybara` `hedgehog` `lamb` `piglet` `duckling` `frog` `turtle` `penguin` `sparrow` `fish` `magical-girl` `ninja` `neko-girl` `samurai` `little-witch` |
 | `data-color` | see the table above |
 | `data-size` | `S` `M` `L` `XL` |
 | `data-speed` | `slow` `normal` `fast` |
@@ -94,7 +110,7 @@ Works even on strict-CSP sites like GitHub, because it doesn't use `eval` or loa
 
 You can also load the minified build from the CDN:
 ```html
-<script src="https://cdn.jsdelivr.net/gh/mPhpMaster/pixel-pets@v1.3.0/pets.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/mPhpMaster/pixel-pets@v1.4.0/pets.min.js"></script>
 ```
 
 ### JavaScript API
@@ -109,7 +125,7 @@ PixelPets.destroy(); // remove everything
 
 ## Customizing / adding pets
 
-All the sprites are in [`tools/pets_data.py`](tools/pets_data.py) as 16×16 text grids, with one letter per palette color. Each pet has `idle`, `move1` and `move2` frames (walk cycles live in [`tools/pets_walk.py`](tools/pets_walk.py)). The blink and dance frames are generated from those. To add a pet, a color, a phrase or a treat, edit that file and rebuild:
+All the sprites are in [`tools/pets_data.py`](tools/pets_data.py) as 16×16 text grids, with one letter per palette color. Each pet has `idle`, `move1` and `move2` frames (walk cycles live in [`tools/pets_walk.py`](tools/pets_walk.py); anime characters in [`tools/pets_anime.py`](tools/pets_anime.py)). The blink and dance frames are generated from those. To add a pet, a color, a phrase or a treat, edit that file and rebuild:
 
 ```bash
 python3 tools/build.py      # writes pets.js and the one-line pets.min.js (needs: npm i -g terser)
