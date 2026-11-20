@@ -580,12 +580,15 @@ _install_anime(PETS)
 _install_anime_more(PETS)
 from pets_cars import install as _install_cars
 _install_cars(PETS)
+from pets_sky import install as _install_sky
+_install_sky(PETS)
 
 ORDER = ["cat", "dog", "cockatiel", "hamster", "rabbit", "panda", "fox", "capybara",
          "hedgehog", "lamb", "piglet", "duckling", "frog", "turtle", "penguin", "sparrow", "fish",
          "magical-girl", "ninja", "neko-girl", "samurai", "little-witch",
          "kitsune", "shrine-maiden", "student", "mecha-pilot", "dragon-princess", "robot",
-         "bubble-car", "taxi", "police-car", "race-car", "ice-cream-van", "mini-bus"]
+         "bubble-car", "taxi", "police-car", "race-car", "ice-cream-van", "mini-bus",
+         "plane", "jet", "rocket", "ufo", "helicopter"]
 PETS = {k: PETS[k] for k in ORDER}
 
 # ---------------------------------------------------------------- derived frames

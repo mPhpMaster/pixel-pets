@@ -11,26 +11,35 @@
   const FRAME_MS = 100;
   const script = document.currentScript;
   const LANG_KEY = "pixel-pets:lang";
+  const SCROLL_KEY = "pixel-pets:scroll";
 
   // ------------------------------------------------------------ i18n
   const I18N = {
     en: {
-      dir: "ltr", pets: "Pets", anime: "Anime", cars: "Cars", color: "Color", size: "Size", speed: "Speed", speech: "Speech", language: "Language",
+      dir: "ltr", pets: "Pets", anime: "Anime", cars: "Cars", sky: "Sky", color: "Color", size: "Size", speed: "Speed", speech: "Speech", language: "Language",
       slow: "🐢 Slow", normal: "🚶 Normal", fast: "⚡ Fast", on: "💬 On", off: "🤫 Off",
       love: "❤️ Pet", treat: "🍪 Treat", add: "➕ Add pet", remove: "🗑 Remove",
       close: "Close (Esc)", clickMe: "Click me!", nom: "*nom*", settings: "Pixel Pets settings",
+      scroll: "On scroll", screen: "📌 Stay on screen", page: "📜 Move with page",
     },
     ar: {
-      dir: "rtl", pets: "الحيوانات", anime: "شخصيات أنمي", cars: "سيارات", color: "اللون", size: "الحجم", speed: "السرعة", speech: "الكلام", language: "اللغة",
+      dir: "rtl", pets: "حيوانات", anime: "أنمي", cars: "سيارات", sky: "السماء", color: "اللون", size: "الحجم", speed: "السرعة", speech: "الكلام", language: "اللغة",
       slow: "🐢 بطيء", normal: "🚶 عادي", fast: "⚡ سريع", on: "💬 تشغيل", off: "🤫 إيقاف",
       love: "❤️ دلّعه", treat: "🍪 حلاوة", add: "➕ حيوان جديد", remove: "🗑 حذف",
       close: "إغلاق (Esc)", clickMe: "اضغط عليّ!", nom: "*هام هام*", settings: "إعدادات الحيوانات",
+      scroll: "عند التمرير", screen: "📌 يبقى بمكانه", page: "📜 يتحرك مع الصفحة",
     },
   };
   let lang = (() => {
     try { const l = localStorage.getItem(LANG_KEY); if (I18N[l]) return l; } catch (_) {}
     const d = script && script.dataset && script.dataset.lang;
     return I18N[d] ? d : "en";
+  })();
+  // "screen": pets keep their place on screen while scrolling; "page": they scroll away with the content.
+  let scrollMode = (() => {
+    try { const m = localStorage.getItem(SCROLL_KEY); if (m === "screen" || m === "page") return m; } catch (_) {}
+    const d = script && script.dataset && script.dataset.scroll;
+    return d === "page" ? "page" : "screen";
   })();
   const T = (k) => I18N[lang][k];
   const petName = (d) => (lang === "ar" ? d.ar : d.label);
@@ -100,6 +109,9 @@
     h4 { margin: 10px 0 5px; font-size: 10.5px; letter-spacing: .07em; text-transform: uppercase; opacity: .6; }
     .grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 4px; }
     .row { display: flex; gap: 4px; flex-wrap: wrap; }
+    .tabs { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 3px; margin: 10px 0 6px; padding: 3px; background: #f3eedf; border-radius: 10px; }
+    .btn.tab { padding: 4px 1px; font-size: 11px; line-height: 1.25; background: transparent; white-space: pre-line; }
+    .btn.tab.on { background: #fff; border-color: #2b2418; }
     .btn { all: unset; box-sizing: border-box; cursor: pointer; border: 2px solid transparent; border-radius: 8px;
       background: #f3eedf; padding: 4px 7px; text-align: center; font-size: 12px; white-space: nowrap; }
     .btn:hover { border-color: #cfc4a6; }
@@ -328,9 +340,11 @@
 
       this.x -= (dx / dist) * step;
       this.y -= (dy / dist) * step;
-      const h = this.px / 2;
-      this.x = Math.min(Math.max(h, this.x), innerWidth - h);
-      this.y = Math.min(Math.max(h, this.y), innerHeight - h);
+      if (scrollMode === "screen") {
+        const h = this.px / 2;
+        this.x = Math.min(Math.max(h, this.x), innerWidth - h);
+        this.y = Math.min(Math.max(h, this.y), innerHeight - h);
+      }
       this.place();
     }
   }
@@ -342,6 +356,7 @@
     
     root.append(box);
     let pet = null;
+    let tab = null;
 
     function section(title) { box.append(el("h4", null, title)); }
     function button(label, on, fn, cls = "") {
@@ -366,29 +381,33 @@
       top.append(x);
       box.append(top);
 
-      for (const group of ["pets", "anime", "cars"]) {
-        const entries = Object.entries(PETS).filter(([, p]) => (p.group || "pets") === group);
-        if (!entries.length) continue;
-        section(T(group));
-        const grid = el("div", "grid");
-        for (const [key, p] of entries) {
-          const b = button("", key === pet.type, () => {
-            pet.type = key;
-            pet.color = Object.keys(p.palettes)[0];
-            pet.hush();
-            pet.draw("idle");
-            if (pet.talk) pet.say(rand(petSounds(p)), 14);
-            changed();
-          }, "pick");
-          const c = el("canvas");
-          c.width = c.height = 16;
-          paint(c.getContext("2d"), p.sprites.idle, Object.values(p.palettes)[0], false);
-          b.append(c, document.createTextNode(petName(p)));
-          b.title = petName(p);
-          grid.append(b);
-        }
-        box.append(grid);
+      // character picker: one tab per group
+      const groups = ["pets", "anime", "cars", "sky"].filter((g) => Object.values(PETS).some((p) => (p.group || "pets") === g));
+      if (!groups.includes(tab)) tab = def.group || "pets";
+      const tabs = el("div", "tabs");
+      const icons = { pets: "🐾", anime: "✨", cars: "🚗", sky: "✈️" };
+      for (const g of groups) {
+        tabs.append(button(icons[g] + "\n" + T(g), g === tab, () => { tab = g; render(); }, "tab"));
       }
+      box.append(tabs);
+      const grid = el("div", "grid");
+      for (const [key, p] of Object.entries(PETS).filter(([, p]) => (p.group || "pets") === tab)) {
+        const b = button("", key === pet.type, () => {
+          pet.type = key;
+          pet.color = Object.keys(p.palettes)[0];
+          pet.hush();
+          pet.draw("idle");
+          if (pet.talk) pet.say(rand(petSounds(p)), 14);
+          changed();
+        }, "pick");
+        const c = el("canvas");
+        c.width = c.height = 16;
+        paint(c.getContext("2d"), p.sprites.idle, Object.values(p.palettes)[0], false);
+        b.append(c, document.createTextNode(petName(p)));
+        b.title = petName(p);
+        grid.append(b);
+      }
+      box.append(grid);
 
       section(T("color"));
       const colors = el("div", "row");
@@ -422,6 +441,17 @@
         button(T("off"), !pet.talk, () => { pet.talk = false; pet.hush(); changed(); }, "grow"),
       );
       box.append(talk);
+
+      section(T("scroll"));
+      const scr = el("div", "row");
+      for (const m of ["screen", "page"]) {
+        scr.append(button(T(m), m === scrollMode, () => {
+          scrollMode = m;
+          try { localStorage.setItem(SCROLL_KEY, m); } catch (_) {}
+          render();
+        }, "grow"));
+      }
+      box.append(scr);
 
       section(T("language"));
       const langs = el("div", "row");
@@ -466,6 +496,7 @@
     function changed() { save(); render(); }
 
     function open(p) {
+      if (pet !== p) tab = null;
       if (pet && pet !== p) pet.frozen = false;
       pet = p;
       pet.frozen = true;
@@ -482,8 +513,25 @@
 
     document.addEventListener("click", (e) => { if (pet && !e.composedPath().includes(box)) close(); }, true);
     document.addEventListener("keydown", (e) => { if (pet && e.key === "Escape") close(); });
-    return { open, close, get pet() { return pet; } };
+    return { open, close, position: () => pet && position(), get pet() { return pet; } };
   })();
+
+  // ------------------------------------------------------------ scroll behaviour
+  let lastSX = window.scrollX, lastSY = window.scrollY;
+  window.addEventListener("scroll", () => {
+    const dx = window.scrollX - lastSX, dy = window.scrollY - lastSY;
+    lastSX = window.scrollX; lastSY = window.scrollY;
+    if (scrollMode !== "page" || (!dx && !dy)) return;
+    for (const p of pets) {
+      p.x -= dx; p.y -= dy; p.place();
+      if (p.treat) {
+        p.treat.x -= dx; p.treat.y -= dy;
+        p.treat.el.style.left = p.treat.x + "px";
+        p.treat.el.style.top = p.treat.y + "px";
+      }
+    }
+    menu.position();
+  }, { passive: true });
 
   // ------------------------------------------------------------ boot
   function add(s) {
@@ -522,8 +570,10 @@
       return p;
     },
     get lang() { return lang; },
+    get scrollMode() { return scrollMode; },
+    setScroll(m) { if (m === "screen" || m === "page") { scrollMode = m; try { localStorage.setItem(SCROLL_KEY, m); } catch (_) {} if (menu.pet) menu.open(menu.pet); } },
     setLang(l) { if (I18N[l]) { lang = l; try { localStorage.setItem(LANG_KEY, l); } catch (_) {} if (menu.pet) menu.open(menu.pet); } },
-    reset() { try { localStorage.removeItem(STORE_KEY); localStorage.removeItem(LANG_KEY); } catch (_) {} },
+    reset() { try { localStorage.removeItem(STORE_KEY); localStorage.removeItem(LANG_KEY); localStorage.removeItem(SCROLL_KEY); } catch (_) {} },
     destroy() { destroyed = true; guard.disconnect(); menu.close(); host.remove(); delete window.PixelPets; },
   };
 })();
