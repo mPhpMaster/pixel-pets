@@ -86,11 +86,16 @@ Classic character types, all original designs:
   - **Speed**: 🐢 slow, 🚶 normal, ⚡ fast
   - **Speech**: turn the talking bubbles on or off
   - **On scroll**: 📌 *Stay on screen*, where the pet keeps its place while you scroll (the default), or 📜 *Move with page*, where the pet scrolls away with the content and then walks back to your cursor
+  - **Night**: 🌙 *Sleep at night* (the default) or ☀️ *Always awake*
   - **Language**: English (default) or العربية. The menu switches to right-to-left, and the pets talk in Arabic
   - **❤️ Pet**: hearts, plus a happy little dance
   - **🍪 Treat**: drops the pet's favorite snack somewhere on the page; the pet rushes over and eats it
   - **➕ Add pet**: add more pets (each one is set up separately)
   - **🗑 Remove**: remove this pet
+- **🖐️ Pick up & throw:** drag a pet with the mouse (or your finger) and let go. It flies and tumbles, bounces off the screen edges, lands dizzy (`@_@`), then walks back. Floating pets (owl, ghost, fish) drift instead of falling.
+- **👫 Play together:** with 2+ pets, leave the mouse still for a few seconds and they start playing. Either they **chase** each other ("Catch me~" … "Got you!") or they gather and **nap side by side**. Move the mouse and they wake up.
+- **🌙 Sleeps at night:** between 23:00 and 06:00 (the visitor's local time), pets yawn, walk slower and doze off quickly. You can turn this off in the menu.
+- **🔋 Battery friendly:** all animation stops while the tab is in the background.
 - **Idle life:** pets blink, dance, talk and fall asleep (`z Z`). They also get startled (`!`) when you move away.
 - **Remembers you:** your pets and their settings are saved in `localStorage`.
 - **Zero assets:** every sprite is drawn on a `<canvas>` from code. No images, no network requests, no `eval`, so it works on strict-CSP sites (GitHub, for example) and won't clash with the page's CSS (the pets live in a Shadow DOM).
@@ -107,13 +112,13 @@ Classic character types, all original designs:
 
 ### On your site
 ```html
-<script src="https://cdn.jsdelivr.net/gh/mPhpMaster/pixel-pets@v1.8.1/pets.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/mPhpMaster/pixel-pets@v1.9.0/pets.js"></script>
 ```
 
 To choose the starting pet, add data attributes (all optional):
 ```html
-<script src="https://cdn.jsdelivr.net/gh/mPhpMaster/pixel-pets@v1.8.1/pets.js"
-        data-pet="cat" data-color="black" data-size="L" data-speed="fast" data-talk="true" data-lang="en" data-scroll="screen"></script>
+<script src="https://cdn.jsdelivr.net/gh/mPhpMaster/pixel-pets@v1.9.0/pets.js"
+        data-pet="cat" data-color="black" data-size="L" data-speed="fast" data-talk="true" data-lang="en" data-scroll="screen" data-night="true"></script>
 ```
 
 | Attribute | Values |
@@ -125,6 +130,7 @@ To choose the starting pet, add data attributes (all optional):
 | `data-talk` | `true` `false` |
 | `data-lang` | `en` (default) `ar` |
 | `data-scroll` | `screen` (default: stays on screen) `page` (moves with the page) |
+| `data-night` | `true` (default: sleepy at night) `false` |
 
 Settings the visitor saves from the menu take priority over these defaults.
 
@@ -139,7 +145,7 @@ Works even on strict-CSP sites like GitHub, because it doesn't use `eval` or loa
 
 You can also load the minified build from the CDN:
 ```html
-<script src="https://cdn.jsdelivr.net/gh/mPhpMaster/pixel-pets@v1.8.1/pets.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/mPhpMaster/pixel-pets@v1.9.0/pets.min.js"></script>
 ```
 
 ### JavaScript API
@@ -149,6 +155,8 @@ PixelPets.pets;      // current pets
 PixelPets.types;     // available pet types
 PixelPets.setLang("ar"); // menu + speech language: "en" | "ar"
 PixelPets.setScroll("page"); // "screen" (stay on screen) | "page" (move with page)
+PixelPets.play("chase");    // make 2+ pets play: "chase" | "nap"
+PixelPets.setNightSleep(false); // disable night sleepiness
 PixelPets.reset();   // forget saved pets and settings
 PixelPets.destroy(); // remove everything
 ```

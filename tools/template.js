@@ -12,6 +12,7 @@
   const script = document.currentScript;
   const LANG_KEY = "pixel-pets:lang";
   const SCROLL_KEY = "pixel-pets:scroll";
+  const NIGHT_KEY = "pixel-pets:night";
 
   // ------------------------------------------------------------ i18n
   const I18N = {
@@ -21,6 +22,8 @@
       love: "❤️ Pet", treat: "🍪 Treat", add: "➕ Add pet", remove: "🗑 Remove",
       close: "Close (Esc)", clickMe: "Click me!", nom: "*nom*", settings: "Pixel Pets settings",
       scroll: "On scroll", screen: "📌 Stay on screen", page: "📜 Move with page",
+      hey: "Hey!", wee: "Wheee!", dizzy: "@_@", catchMe: "Catch me~", caught: "Got you!", yawn: "*yawn*",
+      night: "Night", nightOn: "🌙 Sleep at night", nightOff: "☀️ Always awake",
     },
     ar: {
       dir: "rtl", pets: "حيوانات", anime: "أنمي", heroes: "شخصيات", color: "اللون", size: "الحجم", speed: "السرعة", speech: "الكلام", language: "اللغة",
@@ -28,6 +31,8 @@
       love: "❤️ دلّعه", treat: "🍪 حلاوة", add: "➕ حيوان جديد", remove: "🗑 حذف",
       close: "إغلاق (Esc)", clickMe: "اضغط عليّ!", nom: "*هام هام*", settings: "إعدادات الحيوانات",
       scroll: "عند التمرير", screen: "📌 يبقى بمكانه", page: "📜 يتحرك مع الصفحة",
+      hey: "هيه!", wee: "وييي!", dizzy: "@_@", catchMe: "امسكني~", caught: "مسكتك!", yawn: "*تثاؤب*",
+      night: "الليل", nightOn: "🌙 ينام بالليل", nightOff: "☀️ صاحي دايم",
     },
   };
   let lang = (() => {
@@ -41,6 +46,12 @@
     const d = script && script.dataset && script.dataset.scroll;
     return d === "page" ? "page" : "screen";
   })();
+  // Night mode: between 23:00 and 06:00 (visitor's local time) pets get sleepy.
+  let nightSleep = (() => {
+    try { const v = localStorage.getItem(NIGHT_KEY); if (v === "on" || v === "off") return v === "on"; } catch (_) {}
+    return !(script && script.dataset && script.dataset.night === "false");
+  })();
+  const isNight = () => { const h = new Date().getHours(); return nightSleep && (h >= 23 || h < 6); };
   const T = (k) => I18N[lang][k];
   const petName = (d) => (lang === "ar" ? d.ar : d.label);
   const petSounds = (d) => d.sounds[lang] || d.sounds.en;
@@ -86,11 +97,13 @@
   const CSS = `
     :host { all: initial; }
     .pet { position: absolute; left: 0; top: 0; will-change: transform; }
-    .pet canvas { display: block; image-rendering: pixelated; pointer-events: auto; cursor: pointer; }
+    .pet canvas { display: block; image-rendering: pixelated; pointer-events: auto; cursor: grab; touch-action: none; }
+    .pet.held canvas { cursor: grabbing; }
     .bubble { position: absolute; bottom: 100%; left: 50%; transform: translateX(-50%); margin-bottom: 2px;
       background: #fff; color: #1d1a16; border: 2px solid #2b2418; border-radius: 8px; padding: 1px 6px;
       font: 600 12px/1.4 system-ui, -apple-system, "Segoe UI", sans-serif; white-space: nowrap; display: none;
       box-shadow: 2px 2px 0 rgba(0,0,0,.2); }
+    .pet.low .bubble { bottom: auto; top: 100%; margin: 2px 0 0; }
     .heart { position: absolute; pointer-events: none; font: 14px/1 system-ui, sans-serif; color: #e53950;
       animation: up 1.1s ease-out forwards; }
     @keyframes up { to { transform: translate(var(--dx, 0px), -34px) scale(.6); opacity: 0; } }
@@ -158,7 +171,12 @@
 
   // ------------------------------------------------------------ mouse
   let mouseX = innerWidth / 2, mouseY = innerHeight / 2;
-  document.addEventListener("mousemove", (e) => { mouseX = e.clientX; mouseY = e.clientY; }, { passive: true });
+  let lastMouseMove = performance.now();
+  document.addEventListener("mousemove", (e) => {
+    mouseX = e.clientX; mouseY = e.clientY;
+    lastMouseMove = performance.now();
+    if (play && play.type === "nap") stopPlay(true);
+  }, { passive: true });
 
   // ------------------------------------------------------------ Pet
   const pets = [];
@@ -177,6 +195,13 @@
       this.treat = null;
       this.frozen = false;
       this.lift = 0;
+      this.rot = 0;            // tumble angle while thrown
+      this.dragging = false;   // held by the pointer
+      this.air = false;        // flying after a throw
+      this.vx = 0; this.vy = 0;
+      this.playTarget = null;  // set by the play engine (chase / nap)
+      this.playSpeed = 1;
+      this.napping = false;
 
       this.el = el("div", "pet");
       this.bubble = el("div", "bubble");
@@ -189,7 +214,12 @@
       this.el.append(this.bubble, this.canvas);
       root.append(this.el);
 
-      this.canvas.addEventListener("click", (e) => { e.stopPropagation(); menu.open(this); });
+      this.canvas.addEventListener("click", (e) => {
+        e.stopPropagation();
+        if (this.justDragged) { this.justDragged = false; return; }
+        menu.open(this);
+      });
+      this.canvas.addEventListener("pointerdown", (e) => this.grab(e));
       this.applySize();
       this.draw("idle");
       this.place();
@@ -208,6 +238,87 @@
     place() {
       const h = this.px / 2;
       this.el.style.transform = `translate(${Math.round(this.x - h)}px, ${Math.round(this.y - h - this.lift)}px)`;
+      this.canvas.style.transform = this.rot ? `rotate(${Math.round(this.rot)}deg)` : "";
+      this.el.classList.toggle("low", this.y - h < 30);   // near the top edge: show the bubble below
+    }
+
+    // ---- pick up & throw
+    grab(e) {
+      if (e.button !== 0) return;
+      const startX = e.clientX, startY = e.clientY;
+      const offX = this.x - startX, offY = this.y - startY;
+      const samples = [];
+      let moved = false;
+      const move = (ev) => {
+        if (!moved && Math.hypot(ev.clientX - startX, ev.clientY - startY) < 5) return;
+        if (!moved) {
+          moved = true;
+          menu.close();
+          if (play) stopPlay(false);
+          this.dragging = true; this.air = false; this.rot = 0;
+          this.idleAnim = null; this.lift = 0;
+          this.el.classList.add("held");
+          this.draw("blink");
+          if (this.talk) this.say(T("hey"), 10);
+        }
+        this.x = ev.clientX + offX; this.y = ev.clientY + offY;
+        samples.push({ x: this.x, y: this.y, t: performance.now() });
+        if (samples.length > 6) samples.shift();
+        this.rot = Math.max(-25, Math.min(25, (ev.movementX || 0) * 2));
+        this.place();
+      };
+      const up = () => {
+        document.removeEventListener("pointermove", move);
+        document.removeEventListener("pointerup", up);
+        document.removeEventListener("pointercancel", up);
+        if (!moved) return;                       // a plain click: let the click handler open the menu
+        this.justDragged = true;
+        setTimeout(() => { this.justDragged = false; }, 0);
+        this.dragging = false;
+        this.el.classList.remove("held");
+        const a = samples[0], b = samples[samples.length - 1];
+        const dt = a && b ? Math.max(16, b.t - a.t) / 1000 : 1;
+        this.vx = a && b ? Math.max(-2500, Math.min(2500, (b.x - a.x) / dt)) : 0;
+        this.vy = a && b ? Math.max(-2500, Math.min(2500, (b.y - a.y) / dt)) : 0;
+        this.air = true;
+        if (this.talk && Math.hypot(this.vx, this.vy) > 400) this.say(T("wee"), 10);
+      };
+      document.addEventListener("pointermove", move);
+      document.addEventListener("pointerup", up);
+      document.addEventListener("pointercancel", up);
+    }
+
+    physics(dt) {                                 // called every animation frame while thrown
+      const float = !!this.def.float;
+      const h = this.px / 2, W = innerWidth, H = innerHeight;
+      if (!float) this.vy += 2200 * dt;           // gravity
+      const drag = Math.exp(-(float ? 2.2 : 0.25) * dt);
+      this.vx *= drag; if (float) this.vy *= drag;
+      this.x += this.vx * dt; this.y += this.vy * dt;
+      this.rot += this.vx * dt * 1.2;
+      let floor = false;
+      if (this.x < h) { this.x = h; this.vx = -this.vx * 0.6; }
+      if (this.x > W - h) { this.x = W - h; this.vx = -this.vx * 0.6; }
+      if (this.y < h) { this.y = h; this.vy = -this.vy * 0.6; }
+      if (this.y > H - h) {
+        this.y = H - h; floor = true;
+        this.vy = -this.vy * 0.5; this.vx *= 0.75;
+        if (Math.abs(this.vy) < 140) this.vy = 0;
+      }
+      this.place();
+      const speed = Math.hypot(this.vx, this.vy);
+      if ((floor && speed < 60) || (float && speed < 40)) this.land();
+    }
+
+    land() {
+      this.air = false;
+      this.vx = this.vy = 0;
+      this.rot = 0;
+      this.draw("blink");
+      if (this.talk) this.say(T("dizzy"), 12);
+      this.idleTime = 8;                          // a moment to recover, then back to the cursor
+      this.idleAnim = null;
+      this.place();
     }
     say(text, frames = 15) {
       this.bubble.textContent = text;
@@ -243,6 +354,7 @@
       this.idleAnim = null;
     }
     remove() {
+      if (play && play.pets.includes(this)) stopPlay(false);
       if (this.treat) this.treat.el.remove();
       this.el.remove();
       pets.splice(pets.indexOf(this), 1);
@@ -250,6 +362,7 @@
 
     target() {
       if (this.treat) return { x: this.treat.x, y: this.treat.y, stop: 4 };
+      if (this.playTarget) return this.playTarget;
       const i = pets.indexOf(this);
       if (i <= 0) return { x: mouseX, y: mouseY, stop: Math.max(48, this.px * 1.3) };
       const a = i * 2.4, r = 30 + i * 12;            // spread extra pets around the cursor
@@ -260,9 +373,14 @@
       this.idleTime++;
       this.lift = this.def.float ? Math.round(Math.sin(this.frameCount / 4) * 2) : 0;
 
+      if (isNight() && this.idleTime > 25 && this.idleAnim === null) {   // night: doze off quickly
+        if (this.talk) this.say(T("yawn"), 10);
+        this.idleAnim = "sleep";
+        this.idleFrame = 0;
+      }
       if (this.idleTime > 10 && this.idleAnim === null && Math.random() < 1 / 120) {
-        const opts = ["dance", "sleep", "blink", "blink"];
-        if (this.talk) opts.push("talk", "talk");
+        const opts = isNight() ? ["sleep", "blink"] : ["dance", "sleep", "blink", "blink"];
+        if (this.talk && !isNight()) opts.push("talk", "talk");
         this.idleAnim = rand(opts);
         this.idleFrame = 0;
         if (this.idleAnim === "talk") this.say(rand(petSounds(this.def)), 18);
@@ -285,7 +403,8 @@
         case "sleep":
           this.draw("blink");
           if (this.idleFrame >= 6 && this.idleFrame % 10 === 6) this.say(this.idleFrame % 20 === 6 ? "z" : "z Z", 8);
-          if (this.idleFrame > 200) this.idleAnim = null;
+          if (this.idleFrame > 200 && !this.napping && !isNight()) this.idleAnim = null;
+          if (this.idleFrame > 400) this.idleFrame = 6;
           break;
         case "blink":
           this.draw(this.idleFrame < 2 ? "blink" : "idle");
@@ -303,12 +422,13 @@
     frame() {
       this.frameCount++;
       if (this.bubbleTimer > 0 && --this.bubbleTimer === 0) this.hush();
-      if (this.frozen) return;
+      if (this.frozen || this.dragging) return;
+      if (this.air) { this.draw(this.frameCount % 2 ? "move1" : "move2"); return; }
 
       const t = this.target();
       const dx = this.x - t.x, dy = this.y - t.y;
       const dist = Math.hypot(dx, dy);
-      const step = SPEEDS[this.speed] * this.def.speed * (this.treat ? 1.6 : 1);
+      const step = SPEEDS[this.speed] * this.def.speed * (this.treat ? 1.6 : 1) * this.playSpeed * (isNight() ? 0.7 : 1);
 
       if (dist < Math.max(t.stop, step)) {
         if (this.treat) {                         // reached the treat: eat it
@@ -324,8 +444,9 @@
 
       if (this.idleAnim === "sleep") this.hush();
       if (this.idleAnim !== "happy" || this.treat) { this.idleAnim = null; this.idleFrame = 0; }
+      this.napping = false;
 
-      if (this.idleTime > 1 && !this.treat) {     // startled before moving off
+      if (this.idleTime > 1 && !this.treat && !(play && play.type === "chase")) {     // startled before moving off
         if (this.idleTime > 5 && this.talk) this.say("!", 4);
         this.draw("idle");
         this.idleTime = Math.min(this.idleTime, 7) - 1;
@@ -453,6 +574,17 @@
       }
       box.append(scr);
 
+      section(T("night"));
+      const nt = el("div", "row");
+      for (const v of [true, false]) {
+        nt.append(button(T(v ? "nightOn" : "nightOff"), v === nightSleep, () => {
+          nightSleep = v;
+          try { localStorage.setItem(NIGHT_KEY, v ? "on" : "off"); } catch (_) {}
+          render();
+        }, "grow"));
+      }
+      box.append(nt);
+
       section(T("language"));
       const langs = el("div", "row");
       for (const [code, label] of [["en", "English"], ["ar", "العربية"]]) {
@@ -533,6 +665,88 @@
     menu.position();
   }, { passive: true });
 
+  // ------------------------------------------------------------ playing together (2+ pets)
+  let play = null;   // { type: "chase" | "nap", pets: [...], ... }
+  const free = (p) => !p.dragging && !p.air && !p.treat && !p.frozen;
+
+  function startPlay(type) {
+    const cands = pets.filter(free);
+    if (cands.length < 2) return false;
+    if (type === "chase") {
+      const a = rand(cands), b = rand(cands.filter((p) => p !== a));
+      play = { type, pets: [a, b], chaser: a, runner: b, catches: 0, until: performance.now() + 12000, pauseUntil: 0 };
+      a.idleAnim = b.idleAnim = null; a.hush(); b.hush();
+      if (a.talk) a.say("!", 6);
+      if (b.talk) b.say(T("catchMe"), 12);
+    } else {
+      const group = cands.slice(0, 4);
+      const cx = group.reduce((s, p) => s + p.x, 0) / group.length;
+      const cy = group.reduce((s, p) => s + p.y, 0) / group.length;
+      play = { type, pets: group };
+      group.forEach((p, i) => {
+        const gap = Math.max(26, p.px * 0.9);
+        p.playTarget = {
+          x: Math.min(Math.max(40, cx + (i - (group.length - 1) / 2) * gap), innerWidth - 40),
+          y: Math.min(Math.max(40, cy), innerHeight - 40),
+          stop: 3,
+        };
+        p.idleAnim = null;
+      });
+    }
+    return true;
+  }
+
+  function stopPlay(wake) {
+    if (!play) return;
+    for (const p of play.pets) {
+      p.playTarget = null; p.playSpeed = 1; p.napping = false;
+      if (wake && p.idleAnim === "sleep") { p.idleAnim = null; p.hush(); p.idleTime = 8; }
+    }
+    play = null;
+  }
+
+  function playTick(now) {
+    if (!play) {
+      if (pets.length < 2 || menu.pet || now - lastMouseMove < 4000) return;
+      if (Math.random() < 1 / 50) startPlay(rand(["chase", "chase", "nap"]));
+      return;
+    }
+    if (play.pets.some((p) => !pets.includes(p) || p.dragging || p.air)) return stopPlay(false);
+
+    if (play.type === "chase") {
+      const { chaser: a, runner: b } = play;
+      if (now > play.until || play.catches >= 3) return stopPlay(false);
+      if (now < play.pauseUntil) { a.playTarget = { x: a.x, y: a.y, stop: 999 }; b.playTarget = { x: b.x, y: b.y, stop: 999 }; return; }
+      const dx = b.x - a.x, dy = b.y - a.y, d = Math.hypot(dx, dy) || 1;
+      if (d < Math.max(22, (a.px + b.px) / 3)) {             // caught! swap roles
+        if (a.talk) a.say(T("caught"), 10);
+        b.hearts(2);
+        play.catches++;
+        play.chaser = b; play.runner = a;
+        play.pauseUntil = now + 900;
+        return;
+      }
+      const m = 30;
+      a.playTarget = { x: b.x, y: b.y, stop: 2 }; a.playSpeed = 1.15;
+      b.playTarget = {
+        x: Math.min(Math.max(m, b.x + (dx / d) * 90), innerWidth - m),
+        y: Math.min(Math.max(m, b.y + (dy / d) * 90), innerHeight - m),
+        stop: 2,
+      };
+      b.playSpeed = 0.9;
+    } else {                                                      // nap: gather, then sleep side by side
+      const cx = play.pets.reduce((s, p) => s + p.x, 0) / play.pets.length;
+      for (const p of play.pets) {
+        const t = p.playTarget;
+        if (t && Math.hypot(p.x - t.x, p.y - t.y) < 12 && !p.napping) {
+          p.napping = true;
+          p.facing = p.x < cx ? 1 : -1;
+          p.idleAnim = "sleep"; p.idleFrame = 0; p.idleTime = 20;
+        }
+      }
+    }
+  }
+
   // ------------------------------------------------------------ boot
   function add(s) {
     const p = new Pet({ ...defaults(), ...s });
@@ -550,14 +764,24 @@
   const saved = load();
   (saved.length ? saved : [defaults()]).forEach(add);
 
-  let last;
+  let last, lastPhys, running = false;
   function loop(t) {
-    if (destroyed) return;                       // PixelPets.destroy() stops everything
+    if (destroyed || document.hidden) { running = false; return; }   // paused while the tab is hidden
     if (last === undefined) last = t;
-    if (t - last > FRAME_MS) { last = t; for (const p of pets.slice()) p.frame(); }
+    const dt = Math.min(0.05, ((t - (lastPhys === undefined ? t : lastPhys)) / 1000));
+    lastPhys = t;
+    for (const p of pets) if (p.air) p.physics(dt);                 // smooth throw physics every frame
+    if (t - last > FRAME_MS) { last = t; playTick(performance.now()); for (const p of pets.slice()) p.frame(); }
     requestAnimationFrame(loop);
   }
-  requestAnimationFrame(loop);
+  function start() {
+    if (running || destroyed || document.hidden) return;
+    running = true; last = undefined; lastPhys = undefined;
+    requestAnimationFrame(loop);
+  }
+  // Save battery: stop all animation while the tab is in the background.
+  document.addEventListener("visibilitychange", start);
+  start();
 
   window.PixelPets = {
     root: host,
@@ -571,9 +795,13 @@
     },
     get lang() { return lang; },
     get scrollMode() { return scrollMode; },
+    get paused() { return !running; },
+    play(type = "chase") { stopPlay(false); return startPlay(type === "nap" ? "nap" : "chase"); },
+    stopPlay() { stopPlay(true); },
+    setNightSleep(on) { nightSleep = !!on; try { localStorage.setItem(NIGHT_KEY, on ? "on" : "off"); } catch (_) {} if (menu.pet) menu.open(menu.pet); },
     setScroll(m) { if (m === "screen" || m === "page") { scrollMode = m; try { localStorage.setItem(SCROLL_KEY, m); } catch (_) {} if (menu.pet) menu.open(menu.pet); } },
     setLang(l) { if (I18N[l]) { lang = l; try { localStorage.setItem(LANG_KEY, l); } catch (_) {} if (menu.pet) menu.open(menu.pet); } },
-    reset() { try { localStorage.removeItem(STORE_KEY); localStorage.removeItem(LANG_KEY); localStorage.removeItem(SCROLL_KEY); } catch (_) {} },
+    reset() { try { [STORE_KEY, LANG_KEY, SCROLL_KEY, NIGHT_KEY].forEach((k) => localStorage.removeItem(k)); } catch (_) {} },
     destroy() { destroyed = true; guard.disconnect(); menu.close(); host.remove(); delete window.PixelPets; },
   };
 })();

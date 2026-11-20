@@ -42,13 +42,16 @@
       <li><b>Click the pet</b> to open its menu.</li>
       <li>Pick from 3 tabs: 23 animals, 11 chibi anime characters, or 6 classic characters (pirate, astronaut, ghost…). Then choose a color, size and speed.</li>
       <li>Try <b>❤️ Pet</b> and <b>🍪 Treat</b>, or add more pets.</li>
+      <li><b>Drag &amp; throw</b> a pet. It flies, bounces and lands dizzy!</li>
+      <li>With 2+ pets, leave the mouse still and watch them <b>play together</b>.</li>
       <li>Switch the language to <b>العربية</b> to make them talk in Arabic.</li>
       <li>Scroll down, then set <b>On scroll</b> to <b>📌 Stay on screen</b> or <b>📜 Move with page</b>.</li>
     </ol>
-    <pre>&lt;script src="https://cdn.jsdelivr.net/gh/mPhpMaster/pixel-pets@v1.8.1/pets.js"&gt;&lt;/script&gt;</pre>
+    <pre>&lt;script src="https://cdn.jsdelivr.net/gh/mPhpMaster/pixel-pets@v1.9.0/pets.js"&gt;&lt;/script&gt;</pre>
     <div class="row">
       <button class="btn" type="button" id="copy">📋 Copy one-liner</button>
       <button class="btn" type="button" id="add">➕ Add a random pet</button>
+      <button class="btn" type="button" id="play">👫 Play!</button>
       <button class="btn" type="button" id="reset">↺ Reset</button>
       <a class="btn" href="https://github.com/mPhpMaster/pixel-pets">GitHub</a>
     </div>
@@ -72,6 +75,11 @@
         .then(function () { btn.textContent = "✅ Copied!"; })
         .catch(function () { window.open("pets.min.js", "_blank"); })
         .finally(function () { setTimeout(function () { btn.textContent = "📋 Copy one-liner"; }, 2000); });
+    });
+    document.getElementById("play").addEventListener("click", function () {
+      var types = PixelPets.types;
+      while (PixelPets.pets.length < 3) PixelPets.add({ type: types[Math.floor(Math.random() * types.length)] });
+      setTimeout(function () { PixelPets.play(Math.random() < 0.7 ? "chase" : "nap"); }, 600);
     });
     document.getElementById("reset").addEventListener("click", function () {
       PixelPets.reset();
