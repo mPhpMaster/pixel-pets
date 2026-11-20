@@ -2,6 +2,8 @@
 
 Tiny, cute pixel-art pets that follow your cursor around the page. **Click a pet** to pick its type, color, size and speed, switch the language (English / العربية), give it a treat, or add more pets. Inspired by [oneko.js](https://github.com/adryd325/oneko.js).
 
+<p align="center"><b><a href="https://mphpmaster.github.io/pixel-pets/">▶ Try the live demo</a></b></p>
+
 <p align="center"><img src="demo.gif" alt="Pixel Pets: cat, dog, cockatiel, hamster, rabbit, panda, fox, duckling, frog, penguin, sparrow, fish"></p>
 
 ## Pets
@@ -21,11 +23,13 @@ Tiny, cute pixel-art pets that follow your cursor around the page. **Click a pet
 | 🐦 Sparrow | عصفور | sparrow · canary · bluebird | 🌻 🍞 |
 | 🐟 Fish | سمكة | goldfish · blue-tang · clownfish | 🦐 |
 
+### Preview
+
+<p align="center"><img src="preview.png" width="406" alt="Every pet in every color"></p>
+
 Each pet moves its own way: birds flap, cats and dogs walk, the rabbit and frog hop, penguins, pandas and ducklings waddle, and the fish floats.
 
 ## Features
-
-<img src="menu.png" align="right" width="280" alt="Pet menu">
 
 - **Click any pet** to open its menu:
   - **Pet**: switch between the 12 animals
@@ -42,7 +46,13 @@ Each pet moves its own way: birds flap, cats and dogs walk, the rabbit and frog 
 - **Remembers you:** your pets and their settings are saved in `localStorage`.
 - **Zero assets:** every sprite is drawn on a `<canvas>` from code. No images, no network requests, no `eval`, so it works on strict-CSP sites (GitHub, for example) and won't clash with the page's CSS (the pets live in a Shadow DOM).
 
-<br clear="right">
+### The menu (English / العربية)
+
+<p align="center">
+  <img src="menu.png" width="300" alt="Pet menu in English">
+  &nbsp;
+  <img src="menu-ar.png" width="300" alt="قائمة الحيوان بالعربي">
+</p>
 
 ## Usage
 
