@@ -552,7 +552,7 @@ PETS["frog"] = dict(
     ]),
 )
 
-for _k in ("hamster", "panda", "fox", "frog"):
+for _k in ("hamster", "panda", "fox", "frog"):  # placeholders, replaced in pets_walk.py
     PETS[_k]["sprites"]["move1"] = PETS[_k]["sprites"]["idle"]
     PETS[_k]["sprites"]["move2"] = PETS[_k]["sprites"]["idle"]
 
@@ -573,7 +573,11 @@ SOUNDS = {
 for _k, (_en, _ar) in SOUNDS.items():
     PETS[_k]["sounds"] = {"en": _en, "ar": _ar}
 
-ORDER = ["cat", "dog", "cockatiel", "hamster", "rabbit", "panda", "fox", "duckling", "frog", "penguin", "sparrow", "fish"]
+from pets_walk import install as _install_walks
+_install_walks(PETS)
+
+ORDER = ["cat", "dog", "cockatiel", "hamster", "rabbit", "panda", "fox", "capybara",
+         "hedgehog", "lamb", "piglet", "duckling", "frog", "turtle", "penguin", "sparrow", "fish"]
 PETS = {k: PETS[k] for k in ORDER}
 
 # ---------------------------------------------------------------- derived frames

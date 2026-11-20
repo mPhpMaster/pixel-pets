@@ -88,7 +88,7 @@
     .treat { position: absolute; font: 20px/1 system-ui, sans-serif; transform: translate(-50%, -50%);
       pointer-events: none; animation: drop .35s ease-out; }
     @keyframes drop { from { transform: translate(-50%, -140%); opacity: 0; } }
-    .menu { position: absolute; pointer-events: auto; width: 248px; box-sizing: border-box;
+    .menu { position: absolute; pointer-events: auto; width: 256px; box-sizing: border-box;
       background: #fffdf6; color: #2b2418; border: 2px solid #2b2418; border-radius: 14px;
       box-shadow: 4px 4px 0 rgba(0,0,0,.18); padding: 10px 10px 12px; display: none; max-height: calc(100vh - 16px); overflow-y: auto;
       font: 13px/1.35 system-ui, -apple-system, "Segoe UI", sans-serif; user-select: none; }
@@ -98,14 +98,14 @@
     .x { all: unset; cursor: pointer; padding: 0 6px; font-size: 16px; border-radius: 6px; }
     .x:hover { background: #f1ead6; }
     h4 { margin: 10px 0 5px; font-size: 10.5px; letter-spacing: .07em; text-transform: uppercase; opacity: .6; }
-    .grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; }
+    .grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 4px; }
     .row { display: flex; gap: 4px; flex-wrap: wrap; }
     .btn { all: unset; box-sizing: border-box; cursor: pointer; border: 2px solid transparent; border-radius: 8px;
       background: #f3eedf; padding: 4px 7px; text-align: center; font-size: 12px; white-space: nowrap; }
     .btn:hover { border-color: #cfc4a6; }
     .btn.on { border-color: #2b2418; background: #fff; }
     .btn:focus-visible { outline: 2px solid #3b82f6; outline-offset: 1px; }
-    .pick { padding: 4px 2px 3px; font-size: 10.5px; }
+    .pick { padding: 4px 1px 3px; font-size: 10px; overflow: hidden; text-overflow: ellipsis; }
     .pick canvas { width: 32px; height: 32px; image-rendering: pixelated; display: block; margin: 0 auto 1px; }
     .sw { width: 24px; height: 24px; padding: 0; border-radius: 50%; border: 2px solid #d8cfb6; }
     .sw.on { border-color: #2b2418; box-shadow: 0 0 0 2px #fffdf6 inset; }
@@ -449,7 +449,7 @@
     }
 
     function position() {
-      const w = 248, h = box.offsetHeight || 420, m = 8;
+      const w = 256, h = box.offsetHeight || 420, m = 8;
       let left = pet.x + pet.px / 2 + 10;
       if (left + w > innerWidth - m) left = pet.x - pet.px / 2 - 10 - w;
       let top = pet.y - h / 2;

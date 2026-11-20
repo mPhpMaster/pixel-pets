@@ -4,7 +4,7 @@ Tiny, cute pixel-art pets that follow your cursor around the page. **Click a pet
 
 <p align="center"><b><a href="https://mphpmaster.github.io/pixel-pets/">▶ Try the live demo</a></b></p>
 
-<p align="center"><img src="demo.gif" alt="Pixel Pets: cat, dog, cockatiel, hamster, rabbit, panda, fox, duckling, frog, penguin, sparrow, fish"></p>
+<p align="center"><img src="demo.gif" alt="Pixel Pets: 17 cute pixel-art pets walking"></p>
 
 ## Pets
 
@@ -17,8 +17,13 @@ Tiny, cute pixel-art pets that follow your cursor around the page. **Click a pet
 | 🐰 Rabbit | أرنب | white · brown · grey | 🥕 |
 | 🐼 Panda | باندا | panda · red-panda · brown | 🎋 |
 | 🦊 Fox | ثعلب | red · arctic · fennec | 🍇 |
+| 🦫 Capybara | كابيبارا | brown · caramel · cocoa | 🍊 🍉 |
+| 🦔 Hedgehog | قنفذ | brown · albino · chocolate | 🍓 🐛 |
+| 🐑 Lamb | خروف | white · black-face · pink | 🌿 🍀 |
+| 🐷 Piglet | خنزير صغير | pink · mud · black | 🍎 🌽 |
 | 🐥 Duckling | بطة | yellow · white · mallard | 🍞 🌽 |
 | 🐸 Frog | ضفدع | green · pink · blue | 🪰 |
+| 🐢 Turtle | سلحفاة | green · brown · sea | 🥬 🍓 |
 | 🐧 Penguin | بطريق | classic · emperor · baby | 🐟 |
 | 🐦 Sparrow | عصفور | sparrow · canary · bluebird | 🌻 🍞 |
 | 🐟 Fish | سمكة | goldfish · blue-tang · clownfish | 🦐 |
@@ -27,12 +32,12 @@ Tiny, cute pixel-art pets that follow your cursor around the page. **Click a pet
 
 <p align="center"><img src="preview.png" width="406" alt="Every pet in every color"></p>
 
-Each pet moves its own way: birds flap, cats and dogs walk, the rabbit and frog hop, penguins, pandas and ducklings waddle, and the fish floats.
+Each pet has its own animation for moving: cats, dogs, foxes, pandas, hamsters, capybaras, hedgehogs, lambs, piglets and turtles **walk with their legs**, the rabbit and frog **hop**, penguins and ducklings **waddle**, the birds **flap their wings**, and the fish **swims**.
 
 ## Features
 
 - **Click any pet** to open its menu:
-  - **Pet**: switch between the 12 animals
+  - **Pet**: switch between the 17 animals
   - **Color**: 3–4 color variants per animal
   - **Size**: S, M, L, XL
   - **Speed**: 🐢 slow, 🚶 normal, ⚡ fast
@@ -58,18 +63,18 @@ Each pet moves its own way: birds flap, cats and dogs walk, the rabbit and frog 
 
 ### On your site
 ```html
-<script src="https://cdn.jsdelivr.net/gh/mPhpMaster/pixel-pets@v1.2.0/pets.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/mPhpMaster/pixel-pets@v1.3.0/pets.js"></script>
 ```
 
 To choose the starting pet, add data attributes (all optional):
 ```html
-<script src="https://cdn.jsdelivr.net/gh/mPhpMaster/pixel-pets@v1.2.0/pets.js"
+<script src="https://cdn.jsdelivr.net/gh/mPhpMaster/pixel-pets@v1.3.0/pets.js"
         data-pet="cat" data-color="black" data-size="L" data-speed="fast" data-talk="true" data-lang="en"></script>
 ```
 
 | Attribute | Values |
 |---|---|
-| `data-pet` | `cat` `dog` `cockatiel` `hamster` `rabbit` `panda` `fox` `duckling` `frog` `penguin` `sparrow` `fish` |
+| `data-pet` | `cat` `dog` `cockatiel` `hamster` `rabbit` `panda` `fox` `capybara` `hedgehog` `lamb` `piglet` `duckling` `frog` `turtle` `penguin` `sparrow` `fish` |
 | `data-color` | see the table above |
 | `data-size` | `S` `M` `L` `XL` |
 | `data-speed` | `slow` `normal` `fast` |
@@ -89,7 +94,7 @@ Works even on strict-CSP sites like GitHub, because it doesn't use `eval` or loa
 
 You can also load the minified build from the CDN:
 ```html
-<script src="https://cdn.jsdelivr.net/gh/mPhpMaster/pixel-pets@v1.2.0/pets.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/mPhpMaster/pixel-pets@v1.3.0/pets.min.js"></script>
 ```
 
 ### JavaScript API
@@ -104,7 +109,7 @@ PixelPets.destroy(); // remove everything
 
 ## Customizing / adding pets
 
-All the sprites are in [`tools/pets_data.py`](tools/pets_data.py) as 16×16 text grids, with one letter per palette color. Each pet has `idle`, `move1` and `move2` frames. The blink and dance frames are generated from those. To add a pet, a color, a phrase or a treat, edit that file and rebuild:
+All the sprites are in [`tools/pets_data.py`](tools/pets_data.py) as 16×16 text grids, with one letter per palette color. Each pet has `idle`, `move1` and `move2` frames (walk cycles live in [`tools/pets_walk.py`](tools/pets_walk.py)). The blink and dance frames are generated from those. To add a pet, a color, a phrase or a treat, edit that file and rebuild:
 
 ```bash
 python3 tools/build.py      # writes pets.js and the one-line pets.min.js (needs: npm i -g terser)
