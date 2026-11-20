@@ -3,7 +3,7 @@
 // Self-contained: no images, no network, no eval. Works on strict-CSP pages too.
 (function pixelPets() {
   "use strict";
-  if (window.PixelPets && window.PixelPets.root && window.PixelPets.root.isConnected) return;
+  if (window.PixelPets && window.PixelPets.root) return;
 
   const PETS = __PETS__;
   const STORE_KEY = "pixel-pets:v1";
@@ -43,7 +43,11 @@
   // ------------------------------------------------------------ DOM (shadow root keeps page CSS out)
   const host = document.createElement("div");
   host.id = "pixel-pets";
-  Object.assign(host.style, { position: "fixed", inset: "0", pointerEvents: "none", zIndex: "2147483647" });
+  // Zero-size anchor (pets overflow out of it). A full-screen overlay gets removed by popup/overlay-blocker extensions.
+  Object.assign(host.style, {
+    position: "fixed", left: "0", top: "0", width: "0", height: "0",
+    overflow: "visible", pointerEvents: "none", zIndex: "2147483647",
+  });
   const root = host.attachShadow({ mode: "open" });
 
   const CSS = `
@@ -446,13 +450,19 @@
     return p;
   }
 
+  let destroyed = false;
   document.body.appendChild(host);
+  // If something (e.g. an extension) removes us, put the pets back.
+  const guard = new MutationObserver(() => {
+    if (!destroyed && !host.isConnected) document.body.appendChild(host);
+  });
+  guard.observe(document.documentElement, { childList: true, subtree: true });
   const saved = load();
   (saved.length ? saved : [defaults()]).forEach(add);
 
   let last;
   function loop(t) {
-    if (!host.isConnected) return;               // remove #pixel-pets to stop everything
+    if (destroyed) return;                       // PixelPets.destroy() stops everything
     if (last === undefined) last = t;
     if (t - last > FRAME_MS) { last = t; for (const p of pets.slice()) p.frame(); }
     requestAnimationFrame(loop);
@@ -470,6 +480,6 @@
       return p;
     },
     reset() { try { localStorage.removeItem(STORE_KEY); } catch (_) {} },
-    destroy() { menu.close(); host.remove(); delete window.PixelPets; },
+    destroy() { destroyed = true; guard.disconnect(); menu.close(); host.remove(); delete window.PixelPets; },
   };
 })();
